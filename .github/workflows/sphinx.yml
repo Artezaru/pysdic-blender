@@ -55,6 +55,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install $DOCS_REQUIREMENTS
           pip install .[all]
+          pip install pysdic["open3d"]
 
       - name: Build documentation
         run: sphinx-build -b html "$DOCS_SOURCE" public/
