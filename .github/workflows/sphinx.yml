@@ -65,6 +65,9 @@ jobs:
       - name: Check open3d
         run: python -c "import open3d; print(open3d.__version__)"
 
+      - name: Check bpy
+        run: python -c "import bpy; print(bpy.app.version_string)"
+
       - name: Build documentation
         run: sphinx-build -b html "$DOCS_SOURCE" public/
 
