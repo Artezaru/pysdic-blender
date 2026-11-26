@@ -37,16 +37,23 @@ from .blender_spotlight import BlenderSpotLight
 # =============================================================================
 # Internal helpers
 # =============================================================================
-def _import_bpy() -> Any:
-    # bpy is imported at the first use only: it is slow to import (it loads Blender)
+def _import_bpy():
     try:
         import bpy
     except ImportError as error:
-        raise ImportError(
-            "Missing 'bpy' (Blender as a Python module): install it with 'pip install bpy'. Each release of bpy "
-            "supports exactly one version of Python (e.g. bpy 5.1 for Python 3.13): use the version of Python of "
-            "the release of Blender."
-        ) from error
+        cause = f"{type(error).__name__}: {error}"
+        if isinstance(error, ModuleNotFoundError) and error.name == "bpy":
+            message = (
+                "Missing 'bpy' (Blender as a Python module): install it with 'pip install bpy'. "
+                "Each release of bpy supports exactly one version of Python (e.g. bpy 5.1 for Python 3.13): "
+                f"use the version of Python of the release of Blender. Original error: {cause}"
+            )
+        else:
+            message = (
+                "The 'bpy' package is installed but cannot be imported (missing system library, "
+                f"wrong version of Python, ...). Original error: {cause}"
+            )
+        raise ImportError(message) from error
     return bpy
 
 
