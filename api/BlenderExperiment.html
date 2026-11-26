@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>pysdic_blender.BlenderExperiment &#8212; pysdic-blender 1.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../_static/documentation_options.js?v=fc837d61"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/BlenderExperiment';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pysdic_blender.render_blender_image" href="render_blender_image.html" />
+    <link rel="prev" title="API Reference" href="../api.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic-blender 1.1.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">pysdic_blender.BlenderExperiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="render_blender_image.html">pysdic_blender.render_blender_image</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="BlenderCamera.html">pysdic_blender.BlenderCamera</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlenderMesh.html">pysdic_blender.BlenderMesh</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="BlenderMaterialBSDF.html">pysdic_blender.BlenderMaterialBSDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_matte_paint_material.html">pysdic_blender.get_matte_paint_material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_steel_material.html">pysdic_blender.get_steel_material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_iron_material.html">pysdic_blender.get_iron_material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_copper_material.html">pysdic_blender.get_copper_material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_titanium_material.html">pysdic_blender.get_titanium_material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_mirror_material.html">pysdic_blender.get_mirror_material</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="BlenderSpotLight.html">pysdic_blender.BlenderSpotLight</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic_blender.BlenderExperiment</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="pysdic-blender-blenderexperiment">
+<h1>pysdic_blender.BlenderExperiment<a class="headerlink" href="#pysdic-blender-blenderexperiment" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">BlenderExperiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_strength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A Blender scene of cameras, meshes and spot lights, rendered with Cycles.</p>
+<p>The objects of pysdic are converted when they are added (see <a class="reference internal" href="BlenderCamera.html#pysdic_blender.BlenderCamera" title="pysdic_blender.BlenderCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderCamera</span></code></a>,
+<a class="reference internal" href="BlenderMesh.html#pysdic_blender.BlenderMesh" title="pysdic_blender.BlenderMesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderMesh</span></code></a>, <a class="reference internal" href="BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF" title="pysdic_blender.BlenderMaterialBSDF"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderMaterialBSDF</span></code></a>, <a class="reference internal" href="BlenderSpotLight.html#pysdic_blender.BlenderSpotLight" title="pysdic_blender.BlenderSpotLight"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderSpotLight</span></code></a>). The scene is
+rendered from one camera at a time with <a class="reference internal" href="#pysdic_blender.BlenderExperiment.render" title="pysdic_blender.BlenderExperiment.render"><code class="xref py py-meth docutils literal notranslate"><span class="pre">render()</span></code></a>, which returns the image as an array.</p>
+<p>For a sequence of frames, update the scene between the renders, e.g. the vertices of a mesh
+displaced by the displacement of each frame (<a class="reference internal" href="#pysdic_blender.BlenderExperiment.update_mesh" title="pysdic_blender.BlenderExperiment.update_mesh"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update_mesh()</span></code></a>).</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Requires <code class="docutils literal notranslate"><span class="pre">bpy</span></code> (Blender as a Python module), imported at the creation of the first
+experiment. Each release of <code class="docutils literal notranslate"><span class="pre">bpy</span></code> supports exactly one version of Python.</p>
+<p>Blender has one global state: creating an experiment <strong>clears all the data of Blender</strong>
+(factory settings, empty scene), and only the last created experiment can be used (the
+previous ones raise an error).</p>
+</div>
+<p><strong>Colors.</strong> The render is saved in OpenEXR (32-bit float, scene-linear values, without the
+tone curve of the view transform) and returned as a linear intensity: the mean of the RGB
+channels. Map it to gray levels and quantize it in pysdic (e.g. a gain, then
+<a class="reference external" href="https://artezaru.github.io/pysdic/api/synthetic/add_gaussian_noise.html#pysdic.add_gaussian_noise" title="(in pysdic)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.add_gaussian_noise()</span></code></a> and <a class="reference external" href="https://artezaru.github.io/pysdic/api/synthetic/quantize_image.html#pysdic.quantize_image" title="(in pysdic)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.quantize_image()</span></code></a>), as for
+<a class="reference external" href="https://artezaru.github.io/pysdic/api/synthetic/generate_synthetic_image.html#pysdic.generate_synthetic_image" title="(in pysdic)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.generate_synthetic_image()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>background_color</strong> (ArrayLike, optional (default: <code class="docutils literal notranslate"><span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1.0)</span></code>)) – The RGB color of the world (ambient light).</p></li>
+<li><p><strong>background_strength</strong> (Real, optional (default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code>)) – The strength of the ambient light (0: only the spot lights).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic_blender</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlenderCamera</span><span class="p">,</span> <span class="n">BlenderExperiment</span><span class="p">,</span> <span class="n">BlenderMesh</span><span class="p">,</span> <span class="n">BlenderSpotLight</span><span class="p">,</span> <span class="n">get_matte_paint_material</span>
+
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">background_strength</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_camera</span><span class="p">(</span><span class="s2">"left"</span><span class="p">,</span> <span class="n">BlenderCamera</span><span class="p">(</span><span class="n">left_camera</span><span class="p">))</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_camera</span><span class="p">(</span><span class="s2">"right"</span><span class="p">,</span> <span class="n">BlenderCamera</span><span class="p">(</span><span class="n">right_camera</span><span class="p">))</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_spotlight</span><span class="p">(</span><span class="s2">"spot"</span><span class="p">,</span> <span class="n">BlenderSpotLight</span><span class="o">.</span><span class="n">looking_at</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">600.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">energy</span><span class="o">=</span><span class="mf">5e5</span><span class="p">))</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="s2">"specimen"</span><span class="p">,</span> <span class="n">BlenderMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">texture</span><span class="o">=</span><span class="n">speckle</span><span class="p">),</span> <span class="n">material</span><span class="o">=</span><span class="n">get_matte_paint_material</span><span class="p">())</span>
+
+<span class="n">images</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">displacement</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">displacements</span><span class="p">):</span>
+    <span class="n">experiment</span><span class="o">.</span><span class="n">update_mesh</span><span class="p">(</span><span class="s2">"specimen"</span><span class="p">,</span> <span class="n">BlenderMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">displacement</span><span class="o">=</span><span class="n">displacement</span><span class="p">))</span>
+    <span class="n">images</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">experiment</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"left"</span><span class="p">,</span> <span class="s2">"right"</span><span class="p">)]</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.add_camera">
+<span class="sig-name descname"><span class="pre">add_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.add_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.add_camera" title="Link to this definition">#</a></dt>
+<dd><p>Add a camera (see <a class="reference internal" href="BlenderCamera.html#pysdic_blender.BlenderCamera" title="pysdic_blender.BlenderCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderCamera</span></code></a>) to the scene, under a unique <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>camera</strong> (<a class="reference internal" href="BlenderCamera.html#pysdic_blender.BlenderCamera" title="pysdic_blender.blender_camera.BlenderCamera"><em>BlenderCamera</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.add_mesh">
+<span class="sig-name descname"><span class="pre">add_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.add_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.add_mesh" title="Link to this definition">#</a></dt>
+<dd><p>Add a mesh (see <a class="reference internal" href="BlenderMesh.html#pysdic_blender.BlenderMesh" title="pysdic_blender.BlenderMesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderMesh</span></code></a>) to the scene with a material (Principled BSDF, see
+<a class="reference internal" href="BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF" title="pysdic_blender.BlenderMaterialBSDF"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderMaterialBSDF</span></code></a>; by default the default material of Blender).</p>
+<p>The texture of the mesh, multiplied by the base color of the material, is the base color
+of the shader: a float image of Blender with the reflectances (linear values, no color
+transform).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>mesh</strong> (<a class="reference internal" href="BlenderMesh.html#pysdic_blender.BlenderMesh" title="pysdic_blender.blender_mesh.BlenderMesh"><em>BlenderMesh</em></a>)</p></li>
+<li><p><strong>material</strong> (<a class="reference internal" href="BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF" title="pysdic_blender.blender_material.BlenderMaterialBSDF"><em>BlenderMaterialBSDF</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.add_spotlight">
+<span class="sig-name descname"><span class="pre">add_spotlight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spotlight</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.add_spotlight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.add_spotlight" title="Link to this definition">#</a></dt>
+<dd><p>Add a spot light (see <a class="reference internal" href="BlenderSpotLight.html#pysdic_blender.BlenderSpotLight" title="pysdic_blender.BlenderSpotLight"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderSpotLight</span></code></a>) to the scene, under a unique <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>spotlight</strong> (<a class="reference internal" href="BlenderSpotLight.html#pysdic_blender.BlenderSpotLight" title="pysdic_blender.blender_spotlight.BlenderSpotLight"><em>BlenderSpotLight</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.camera_names">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">camera_names</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#pysdic_blender.BlenderExperiment.camera_names" title="Link to this definition">#</a></dt>
+<dd><p>The names of the cameras.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.get_camera">
+<span class="sig-name descname"><span class="pre">get_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.get_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.get_camera" title="Link to this definition">#</a></dt>
+<dd><p>The camera named <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="BlenderCamera.html#pysdic_blender.BlenderCamera" title="pysdic_blender.blender_camera.BlenderCamera"><em>BlenderCamera</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.get_mesh">
+<span class="sig-name descname"><span class="pre">get_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.get_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.get_mesh" title="Link to this definition">#</a></dt>
+<dd><p>The mesh named <code class="docutils literal notranslate"><span class="pre">name</span></code> (its last update).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="BlenderMesh.html#pysdic_blender.BlenderMesh" title="pysdic_blender.blender_mesh.BlenderMesh"><em>BlenderMesh</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.get_spotlight">
+<span class="sig-name descname"><span class="pre">get_spotlight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.get_spotlight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.get_spotlight" title="Link to this definition">#</a></dt>
+<dd><p>The spot light named <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="BlenderSpotLight.html#pysdic_blender.BlenderSpotLight" title="pysdic_blender.blender_spotlight.BlenderSpotLight"><em>BlenderSpotLight</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.mesh_names">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">mesh_names</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#pysdic_blender.BlenderExperiment.mesh_names" title="Link to this definition">#</a></dt>
+<dd><p>The names of the meshes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.remove_camera">
+<span class="sig-name descname"><span class="pre">remove_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.remove_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.remove_camera" title="Link to this definition">#</a></dt>
+<dd><p>Remove the camera named <code class="docutils literal notranslate"><span class="pre">name</span></code> from the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.remove_mesh">
+<span class="sig-name descname"><span class="pre">remove_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.remove_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.remove_mesh" title="Link to this definition">#</a></dt>
+<dd><p>Remove the mesh named <code class="docutils literal notranslate"><span class="pre">name</span></code> (with its material and texture) from the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.remove_spotlight">
+<span class="sig-name descname"><span class="pre">remove_spotlight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.remove_spotlight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.remove_spotlight" title="Link to this definition">#</a></dt>
+<dd><p>Remove the spot light named <code class="docutils literal notranslate"><span class="pre">name</span></code> from the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CPU'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CUDA'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.render" title="Link to this definition">#</a></dt>
+<dd><p>Render the scene from a camera with Cycles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camera</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – The name of the camera.</p></li>
+<li><p><strong>n_samples</strong> (Integral, optional (default: <code class="docutils literal notranslate"><span class="pre">128</span></code>)) – The number of samples per pixel (the noise of Cycles decreases as
+<span class="math notranslate nohighlight">\(1 / \sqrt{n}\)</span>). No denoising is applied.</p></li>
+<li><p><strong>filter_width</strong> (Real, optional (default: <code class="docutils literal notranslate"><span class="pre">1.5</span></code>)) – The width in pixels of the pixel filter of Cycles (Blackman-Harris): the blur of the
+render.</p></li>
+<li><p><strong>seed</strong> (Integral, optional (default: <code class="docutils literal notranslate"><span class="pre">0</span></code>)) – The seed of the sampling of Cycles (reproducible renders).</p></li>
+<li><p><strong>device</strong> (str, optional (default: <code class="docutils literal notranslate"><span class="pre">&quot;CPU&quot;</span></code>)) – <code class="docutils literal notranslate"><span class="pre">&quot;CPU&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;GPU&quot;</span></code>.</p></li>
+<li><p><strong>gpu_backend</strong> (str, optional (default: <code class="docutils literal notranslate"><span class="pre">&quot;CUDA&quot;</span></code>)) – The backend of the GPU devices: <code class="docutils literal notranslate"><span class="pre">&quot;CUDA&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;OPTIX&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;HIP&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;METAL&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;ONEAPI&quot;</span></code> (only with <code class="docutils literal notranslate"><span class="pre">device=&quot;GPU&quot;</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The linear intensity <span class="math notranslate nohighlight">\((H, W)\)</span> (float64), mean of the RGB channels, with the
+rows of the image from top to bottom (pysdic convention).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.set_background">
+<span class="sig-name descname"><span class="pre">set_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.set_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.set_background" title="Link to this definition">#</a></dt>
+<dd><p>Set the world of the scene: a uniform ambient light of an RGB <code class="docutils literal notranslate"><span class="pre">color</span></code> and a
+<code class="docutils literal notranslate"><span class="pre">strength</span></code> (non-negative, 0 for no ambient light).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> (<em>ArrayLike</em>)</p></li>
+<li><p><strong>strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/numbers.html#numbers.Real" title="(in Python v3.15)"><em>Real</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.spotlight_names">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">spotlight_names</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#pysdic_blender.BlenderExperiment.spotlight_names" title="Link to this definition">#</a></dt>
+<dd><p>The names of the spot lights.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderExperiment.update_mesh">
+<span class="sig-name descname"><span class="pre">update_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_experiment.html#BlenderExperiment.update_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderExperiment.update_mesh" title="Link to this definition">#</a></dt>
+<dd><p>Replace the vertices of a mesh of the scene by those of <code class="docutils literal notranslate"><span class="pre">mesh</span></code>, which must have the same
+triangles and UV coordinates (see <a class="reference internal" href="BlenderMesh.html#pysdic_blender.BlenderMesh.has_same_topology" title="pysdic_blender.BlenderMesh.has_same_topology"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BlenderMesh.has_same_topology()</span></code></a>), e.g. the mesh
+displaced by the displacement of another frame. The texture and the material are kept.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>mesh</strong> (<a class="reference internal" href="BlenderMesh.html#pysdic_blender.BlenderMesh" title="pysdic_blender.blender_mesh.BlenderMesh"><em>BlenderMesh</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../api.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">API Reference</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="render_blender_image.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">pysdic_blender.render_blender_image</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.add_camera"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.add_camera()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.add_mesh"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.add_mesh()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.add_spotlight"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.add_spotlight()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.camera_names"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.camera_names</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.get_camera"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_camera()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.get_mesh"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_mesh()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.get_spotlight"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_spotlight()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.mesh_names"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.mesh_names</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.remove_camera"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.remove_camera()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.remove_mesh"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.remove_mesh()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.remove_spotlight"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.remove_spotlight()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.render"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.render()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.set_background"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.set_background()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.spotlight_names"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.spotlight_names</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderExperiment.update_mesh"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.update_mesh()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/api/BlenderExperiment.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

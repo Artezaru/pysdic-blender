@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>pysdic_blender.BlenderCamera &#8212; pysdic-blender 1.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../_static/documentation_options.js?v=fc837d61"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/BlenderCamera';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pysdic_blender.BlenderMesh" href="BlenderMesh.html" />
+    <link rel="prev" title="pysdic_blender.render_blender_image" href="render_blender_image.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic-blender 1.1.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="BlenderExperiment.html">pysdic_blender.BlenderExperiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="render_blender_image.html">pysdic_blender.render_blender_image</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">pysdic_blender.BlenderCamera</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlenderMesh.html">pysdic_blender.BlenderMesh</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="BlenderMaterialBSDF.html">pysdic_blender.BlenderMaterialBSDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_matte_paint_material.html">pysdic_blender.get_matte_paint_material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_steel_material.html">pysdic_blender.get_steel_material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_iron_material.html">pysdic_blender.get_iron_material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_copper_material.html">pysdic_blender.get_copper_material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_titanium_material.html">pysdic_blender.get_titanium_material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_mirror_material.html">pysdic_blender.get_mirror_material</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="BlenderSpotLight.html">pysdic_blender.BlenderSpotLight</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic_blender.BlenderCamera</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="pysdic-blender-blendercamera">
+<h1>pysdic_blender.BlenderCamera<a class="headerlink" href="#pysdic-blender-blendercamera" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">BlenderCamera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The parameters of a Blender camera reproducing a <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a> of the OpenCV
+pinhole model, without distortion.</p>
+<p>The camera must have:</p>
+<ul class="simple">
+<li><p>a <a class="reference external" href="https://artezaru.github.io/pysdic/api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.PerspectiveExtrinsic</span></code></a>: <span class="math notranslate nohighlight">\(\vec{X}_c = R \vec{X}_w + \vec{t}\)</span> followed
+by the perspective division (OpenCV frame: <span class="math notranslate nohighlight">\(x\)</span> to the right, <span class="math notranslate nohighlight">\(y\)</span> downwards,
+<span class="math notranslate nohighlight">\(z\)</span> along the optical axis);</p></li>
+<li><p>a <a class="reference external" href="https://artezaru.github.io/pysdic/api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.PinholeIntrinsic</span></code></a> without skew: <span class="math notranslate nohighlight">\(x = f_x x_n + c_x\)</span>,
+<span class="math notranslate nohighlight">\(y = f_y y_n + c_y\)</span>;</p></li>
+<li><p>no distortion (Blender does not model it).</p></li>
+</ul>
+<p>Both models are checked on test points, so that the Blender camera projects exactly as the
+pysdic camera, with the same convention of the pixels (centers at integer coordinates).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a camera with a distortion, render the images with the same camera without
+distortion, then apply the distortion with <a class="reference external" href="https://artezaru.github.io/pysdic/api/computer_vision/distort_image.html#pysdic.distort_image" title="(in pysdic)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.distort_image()</span></code></a>.</p>
+</div>
+<p><strong>Blender parameters.</strong> Blender describes a pinhole camera by a focal length <code class="docutils literal notranslate"><span class="pre">lens</span></code> and a
+sensor size in millimeters (only their ratio matters), a sensor fit, a shift of the
+principal point and a pixel aspect ratio. With <span class="math notranslate nohighlight">\(a_x = \max(1, f_y / f_x)\)</span>,
+<span class="math notranslate nohighlight">\(a_y = \max(1, f_x / f_y)\)</span> and the resolution <span class="math notranslate nohighlight">\((W, H)\)</span>:</p>
+<ul class="simple">
+<li><p>sensor fit: <code class="docutils literal notranslate"><span class="pre">&quot;HORIZONTAL&quot;</span></code> if <span class="math notranslate nohighlight">\(a_x W \geq a_y H\)</span>, else <code class="docutils literal notranslate"><span class="pre">&quot;VERTICAL&quot;</span></code>;</p></li>
+<li><p>view factor <span class="math notranslate nohighlight">\(v = W\)</span> (horizontal) or <span class="math notranslate nohighlight">\(v = (a_y / a_x) H\)</span> (vertical);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lens</span></code> <span class="math notranslate nohighlight">\(= f_x s / v\)</span>, with the sensor size <span class="math notranslate nohighlight">\(s = p W\)</span> (horizontal) or
+<span class="math notranslate nohighlight">\(p H\)</span> (vertical) for a pixel size <span class="math notranslate nohighlight">\(p\)</span>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shift_x</span></code> <span class="math notranslate nohighlight">\(= -(c_x - (W - 1)/2) / v\)</span>, <code class="docutils literal notranslate"><span class="pre">shift_y</span></code> <span class="math notranslate nohighlight">\(= (c_y - (H - 1)/2)(a_y / a_x) / v\)</span>.</p></li>
+</ul>
+<p><strong>Pose.</strong> pysdic and OpenCV give the world-to-camera transformation, Blender the pose of the
+camera object in the world (camera-to-world). In the conventions of <code class="docutils literal notranslate"><span class="pre">py3dframe</span></code> (frame
+<span class="math notranslate nohighlight">\(E\)</span> = world, frame <span class="math notranslate nohighlight">\(F\)</span> = camera), the pose goes from the convention 4 to the
+convention 0, with the change of the axes of the camera from OpenCV (<span class="math notranslate nohighlight">\(x\)</span> to the right,
+<span class="math notranslate nohighlight">\(y\)</span> downwards, looking along <span class="math notranslate nohighlight">\(+z\)</span>) to OpenGL (<span class="math notranslate nohighlight">\(y\)</span> upwards, looking along
+<span class="math notranslate nohighlight">\(-z\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\text{OpenCV (convention 4)}: \quad \vec{X}_c = R \vec{X}_w + \vec{t}\\\text{Blender (convention 0)}: \quad \vec{X}_w = R_b \vec{X}_b + \vec{C},
+\qquad R_b = R^T \, \text{diag}(1, -1, -1), \qquad \vec{C} = -R^T \vec{t}\end{aligned}\end{align} \]</div>
+<p>so that the coordinates of a point in the frame of the Blender camera are
+<span class="math notranslate nohighlight">\(\vec{X}_b = (x_c, -y_c, -z_c)\)</span>. The <code class="docutils literal notranslate"><span class="pre">location</span></code> of the object is <span class="math notranslate nohighlight">\(\vec{C}\)</span>
+(<a class="reference internal" href="#pysdic_blender.BlenderCamera.center" title="pysdic_blender.BlenderCamera.center"><code class="xref py py-attr docutils literal notranslate"><span class="pre">center</span></code></a>) and its <code class="docutils literal notranslate"><span class="pre">rotation_quaternion</span></code> is the quaternion of <span class="math notranslate nohighlight">\(R_b\)</span>
+(<a class="reference internal" href="#pysdic_blender.BlenderCamera.quaternion" title="pysdic_blender.BlenderCamera.quaternion"><code class="xref py py-attr docutils literal notranslate"><span class="pre">quaternion</span></code></a>): the inverse of the pose needs <strong>both</strong> the center
+<span class="math notranslate nohighlight">\(-R^T \vec{t}\)</span> and the transposed rotation <span class="math notranslate nohighlight">\(R^T\)</span>.</p>
+<p>The object is immutable: it reads the camera once at its creation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camera</strong> (<a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a>) – The camera to reproduce.</p></li>
+<li><p><strong>pixel_size</strong> (Real, optional (default: <code class="docutils literal notranslate"><span class="pre">0.01</span></code>)) – The size of a pixel in millimeters, giving the sensor size and <code class="docutils literal notranslate"><span class="pre">lens</span></code> (only their
+ratio matters for the image). Blender requires <code class="docutils literal notranslate"><span class="pre">lens</span> <span class="pre">&gt;=</span> <span class="pre">1</span></code> mm: increase it for a
+short focal length.</p></li>
+<li><p><strong>clip_start</strong> (Real, optional (default: <code class="docutils literal notranslate"><span class="pre">1e-3</span></code> and <code class="docutils literal notranslate"><span class="pre">1e6</span></code>)) – The distances of the near and far clipping planes, in the unit of the scene.</p></li>
+<li><p><strong>clip_end</strong> (Real, optional (default: <code class="docutils literal notranslate"><span class="pre">1e-3</span></code> and <code class="docutils literal notranslate"><span class="pre">1e6</span></code>)) – The distances of the near and far clipping planes, in the unit of the scene.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#TypeError" title="(in Python v3.15)"><strong>TypeError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">camera</span></code> is not a <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a>, or its transformations are not of the
+    types above.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – If a transformation does not follow its model on the test points, or <code class="docutils literal notranslate"><span class="pre">lens</span> <span class="pre">&lt;</span> <span class="pre">1</span></code> mm.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Camera</span><span class="p">,</span> <span class="n">PerspectiveExtrinsic</span><span class="p">,</span> <span class="n">PinholeIntrinsic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pysdic_blender</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlenderCamera</span>
+
+<span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span>
+    <span class="mi">1000</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span>
+    <span class="n">extrinsic</span><span class="o">=</span><span class="n">PerspectiveExtrinsic</span><span class="o">.</span><span class="n">from_rt</span><span class="p">(</span><span class="n">rvec</span><span class="o">=</span><span class="p">[</span><span class="mf">3.14159</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">tvec</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">]),</span>
+    <span class="n">intrinsic</span><span class="o">=</span><span class="n">PinholeIntrinsic</span><span class="o">.</span><span class="n">from_matrix</span><span class="p">([[</span><span class="mf">2000.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">599.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2000.0</span><span class="p">,</span> <span class="mf">499.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]]),</span>
+<span class="p">)</span>
+<span class="n">blender_camera</span> <span class="o">=</span> <span class="n">BlenderCamera</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">blender_camera</span><span class="o">.</span><span class="n">lens</span><span class="p">,</span> <span class="n">blender_camera</span><span class="o">.</span><span class="n">shift_x</span><span class="p">,</span> <span class="n">blender_camera</span><span class="o">.</span><span class="n">sensor_fit</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.camera">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">camera</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><span class="pre">Camera</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.camera" title="Link to this definition">#</a></dt>
+<dd><p>The reproduced <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.center">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">center</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.center" title="Link to this definition">#</a></dt>
+<dd><p>The center of the camera <span class="math notranslate nohighlight">\(\vec{C} = -R^T \vec{t}\)</span> (3,) in the world.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.clip_end">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">clip_end</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.clip_end" title="Link to this definition">#</a></dt>
+<dd><p>The distance of the far clipping plane.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.clip_start">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">clip_start</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.clip_start" title="Link to this definition">#</a></dt>
+<dd><p>The distance of the near clipping plane.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.height">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">height</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.height" title="Link to this definition">#</a></dt>
+<dd><p>The resolution <span class="math notranslate nohighlight">\(H\)</span> along <span class="math notranslate nohighlight">\(y\)</span> (pixels).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.intrinsic_matrix">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">intrinsic_matrix</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.intrinsic_matrix" title="Link to this definition">#</a></dt>
+<dd><p>The intrinsic matrix <span class="math notranslate nohighlight">\(K\)</span> (3, 3).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.lens">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">lens</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.lens" title="Link to this definition">#</a></dt>
+<dd><p>The focal length <code class="docutils literal notranslate"><span class="pre">lens</span></code> of the Blender camera in millimeters.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.location">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">location</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.location" title="Link to this definition">#</a></dt>
+<dd><p>its center <span class="math notranslate nohighlight">\(\vec{C} = -R^T \vec{t}\)</span> (convention 0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The location of the Blender camera object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.pixel_aspect">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">pixel_aspect</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.pixel_aspect" title="Link to this definition">#</a></dt>
+<dd><p>The pixel aspect ratio <span class="math notranslate nohighlight">\((a_x, a_y)\)</span> of the render (1 for square pixels).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.pixel_size">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">pixel_size</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.pixel_size" title="Link to this definition">#</a></dt>
+<dd><p>The size of a pixel in millimeters.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.quaternion">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">quaternion</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.quaternion" title="Link to this definition">#</a></dt>
+<dd><p>the quaternion of
+<span class="math notranslate nohighlight">\(R_b = R^T \, \text{diag}(1, -1, -1)\)</span> (convention 0, OpenGL axes).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rotation <code class="docutils literal notranslate"><span class="pre">(w,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> of the Blender camera object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.rotation">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">rotation</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.rotation" title="Link to this definition">#</a></dt>
+<dd><p>The rotation <span class="math notranslate nohighlight">\(R\)</span> (3, 3) of <span class="math notranslate nohighlight">\(\vec{X}_c = R \vec{X}_w + \vec{t}\)</span> (read-only).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.sensor_fit">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_fit</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.sensor_fit" title="Link to this definition">#</a></dt>
+<dd><p>The sensor fit, <code class="docutils literal notranslate"><span class="pre">&quot;HORIZONTAL&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;VERTICAL&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.sensor_height">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_height</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.sensor_height" title="Link to this definition">#</a></dt>
+<dd><p>The height of the sensor <span class="math notranslate nohighlight">\(p H\)</span> in millimeters.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.sensor_width">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_width</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.sensor_width" title="Link to this definition">#</a></dt>
+<dd><p>The width of the sensor <span class="math notranslate nohighlight">\(p W\)</span> in millimeters.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.shift_x">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">shift_x</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.shift_x" title="Link to this definition">#</a></dt>
+<dd><p>The shift of the principal point along <span class="math notranslate nohighlight">\(x\)</span> (fraction of the view factor).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.shift_y">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">shift_y</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.shift_y" title="Link to this definition">#</a></dt>
+<dd><p>The shift of the principal point along <span class="math notranslate nohighlight">\(y\)</span> (fraction of the view factor).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera.to_dict" title="Link to this definition">#</a></dt>
+<dd><p>The parameters of the Blender camera (as given to Blender), e.g. to save the setup of a
+rendering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">resolution</span></code>, <code class="docutils literal notranslate"><span class="pre">pixel_aspect</span></code>, <code class="docutils literal notranslate"><span class="pre">lens</span></code>, <code class="docutils literal notranslate"><span class="pre">sensor_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sensor_height</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sensor_fit</span></code>, <code class="docutils literal notranslate"><span class="pre">shift_x</span></code>, <code class="docutils literal notranslate"><span class="pre">shift_y</span></code>, <code class="docutils literal notranslate"><span class="pre">clip_start</span></code>, <code class="docutils literal notranslate"><span class="pre">clip_end</span></code>, <code class="docutils literal notranslate"><span class="pre">location</span></code>
+and <code class="docutils literal notranslate"><span class="pre">quaternion</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.translation">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">translation</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.translation" title="Link to this definition">#</a></dt>
+<dd><p>The translation <span class="math notranslate nohighlight">\(\vec{t}\)</span> (3,) of <span class="math notranslate nohighlight">\(\vec{X}_c = R \vec{X}_w + \vec{t}\)</span> (read-only).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.width">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">width</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.width" title="Link to this definition">#</a></dt>
+<dd><p>The resolution <span class="math notranslate nohighlight">\(W\)</span> along <span class="math notranslate nohighlight">\(x\)</span> (pixels).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="render_blender_image.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">pysdic_blender.render_blender_image</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="BlenderMesh.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">pysdic_blender.BlenderMesh</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera"><code class="docutils literal notranslate"><span class="pre">BlenderCamera</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.camera"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.camera</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.center"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.center</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.clip_end"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.clip_end</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.clip_start"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.clip_start</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.height"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.height</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.intrinsic_matrix"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.intrinsic_matrix</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.lens"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.lens</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.location"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.location</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.pixel_aspect"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.pixel_aspect</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.pixel_size"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.pixel_size</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.quaternion"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.quaternion</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.rotation"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.rotation</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.sensor_fit"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.sensor_fit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.sensor_height"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.sensor_height</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.sensor_width"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.sensor_width</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.shift_x"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.shift_x</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.shift_y"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.shift_y</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.to_dict"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.to_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.translation"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.translation</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.width"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.width</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/api/BlenderCamera.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

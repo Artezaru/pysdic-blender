@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic_blender.blender_material &#8212; pysdic-blender 1.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=fc837d61"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic_blender/blender_material';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic-blender 1.1.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic_blender.blender_material</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic_blender.blender_material</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic-blender - Rendering of synthetic images for pysdic with Blender</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+
+
+<span class="c1"># Field of the material -&gt; (input of the Principled BSDF node of Blender, number of values or None for a scalar)</span>
+<span class="n">_PRINCIPLED_INPUTS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"base_color"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Base Color"</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="s2">"metallic"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Metallic"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"roughness"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Roughness"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"IOR"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"IOR"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"alpha"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Alpha"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"normal"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Normal"</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="s2">"weight"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Weight"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"subsurface_weight"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Subsurface Weight"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"subsurface_radius"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Subsurface Radius"</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="s2">"subsurface_scale"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Subsurface Scale"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"subsurface_IOR"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Subsurface IOR"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"subsurface_anisotropy"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Subsurface Anisotropy"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"specular_IOR_level"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Specular IOR Level"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"specular_tint"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Specular Tint"</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="s2">"anisotropic"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Anisotropic"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"anisotropic_rotation"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Anisotropic Rotation"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"tangent"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Tangent"</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="s2">"transmission_weight"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Transmission Weight"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"coat_weight"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Coat Weight"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"coat_roughness"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Coat Roughness"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"coat_IOR"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Coat IOR"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"coat_tint"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Coat Tint"</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="s2">"coat_normal"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Coat Normal"</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="s2">"sheen_weight"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Sheen Weight"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"sheen_roughness"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Sheen Roughness"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"sheen_tint"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Sheen Tint"</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="s2">"emission_color"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Emission Color"</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="s2">"emission_strength"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Emission Strength"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"thin_film_thickness"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Thin Film Thickness"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"thin_film_IOR"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Thin Film IOR"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="BlenderMaterialBSDF">
+<a class="viewcode-back" href="../../api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BlenderMaterialBSDF</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    The parameters of the Principled BSDF shader of Blender for the material of a mesh.</span>
+
+<span class="sd">    Each field is an input of the shader (see the `Blender manual</span>
+<span class="sd">    &lt;https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html&gt;`_);</span>
+<span class="sd">    a field left to None keeps the default value of Blender. The colors are RGBA tuples, the</span>
+<span class="sd">    vectors (normals, tangent, radius) XYZ tuples.</span>
+
+<span class="sd">    With a texture (see :class:`BlenderMesh`), the reflectance of the texture is multiplied by</span>
+<span class="sd">    ``base_color`` (white by default).</span>
+
+<span class="sd">    The object is immutable: use :func:`dataclasses.replace` to change a field, e.g.</span>
+<span class="sd">    ``dataclasses.replace(get_steel_material(), roughness=0.4)``.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If a field has a wrong number of values or non-finite values.</span>
+
+<span class="sd">    """</span>
+
+    <span class="n">base_color</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">metallic</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">roughness</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">IOR</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">normal</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">subsurface_weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">subsurface_radius</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">subsurface_scale</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">subsurface_IOR</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">subsurface_anisotropy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">specular_IOR_level</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">specular_tint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">anisotropic</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">anisotropic_rotation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">tangent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">transmission_weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">coat_weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">coat_roughness</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">coat_IOR</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">coat_tint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">coat_normal</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sheen_weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sheen_roughness</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sheen_tint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">emission_color</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">emission_strength</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">thin_film_thickness</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">thin_film_IOR</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Normalize the values: floats or tuples of floats, checked</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span> <span class="ow">in</span> <span class="n">_PRINCIPLED_INPUTS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Field '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' must be a number. Got shape </span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">size</span><span class="p">,):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Field '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' must have </span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2"> values. Got shape </span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">array</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Field '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' must be finite. Got </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">array</span><span class="p">))</span>
+
+<div class="viewcode-block" id="BlenderMaterialBSDF.principled_inputs">
+<a class="viewcode-back" href="../../api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.principled_inputs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">principled_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The values given to the inputs of the Principled BSDF node: ``{input name: value}``</span>
+<span class="sd">        for the fields that are not None.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">_PRINCIPLED_INPUTS</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_PRINCIPLED_INPUTS</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="BlenderMaterialBSDF.to_dict">
+<a class="viewcode-back" href="../../api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Export the material to a dictionary: ``{"type": "BlenderMaterialBSDF", "description":</span>
+<span class="sd">        ..., &lt;field&gt;: &lt;value&gt;}`` with the fields that are not None (lists for the tuples).</span>
+<span class="sd">        """</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"BlenderMaterialBSDF"</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'description' must be a string. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"description"</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="BlenderMaterialBSDF.from_dict">
+<a class="viewcode-back" href="../../api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.from_dict">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">BlenderMaterialBSDF</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create a material from a dictionary of :meth:`to_dict` (``"type"`` and</span>
+<span class="sd">        ``"description"`` are ignored, an unknown key raises a ``KeyError``).</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'data' must be a dictionary. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">)}</span>
+        <span class="n">unknown</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">_PRINCIPLED_INPUTS</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">unknown</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown fields of a BlenderMaterialBSDF: </span><span class="si">{</span><span class="n">unknown</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">values</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BlenderMaterialBSDF.to_json">
+<a class="viewcode-back" href="../../api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.to_json">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Export the material to a JSON file (see :meth:`to_dict`)."""</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">description</span><span class="p">),</span> <span class="n">file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BlenderMaterialBSDF.from_json">
+<a class="viewcode-back" href="../../api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.from_json">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BlenderMaterialBSDF</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Create a material from a JSON file (see :meth:`from_dict`)."""</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">))</span></div>
+</div>
+
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Default materials</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="get_mirror_material">
+<a class="viewcode-back" href="../../api/get_mirror_material.html#pysdic_blender.get_mirror_material">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_mirror_material</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">BlenderMaterialBSDF</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""A perfect mirror: white, fully metallic, no roughness."""</span>
+    <span class="k">return</span> <span class="n">BlenderMaterialBSDF</span><span class="p">(</span><span class="n">base_color</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">metallic</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">roughness</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">IOR</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_steel_material">
+<a class="viewcode-back" href="../../api/get_steel_material.html#pysdic_blender.get_steel_material">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_steel_material</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">BlenderMaterialBSDF</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Polished steel: neutral gray, fully metallic, slightly rough."""</span>
+    <span class="k">return</span> <span class="n">BlenderMaterialBSDF</span><span class="p">(</span><span class="n">base_color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">metallic</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">roughness</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">IOR</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_titanium_material">
+<a class="viewcode-back" href="../../api/get_titanium_material.html#pysdic_blender.get_titanium_material">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_titanium_material</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">BlenderMaterialBSDF</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Titanium: slightly bluish gray, fully metallic, slightly rough."""</span>
+    <span class="k">return</span> <span class="n">BlenderMaterialBSDF</span><span class="p">(</span><span class="n">base_color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.52</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">metallic</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">roughness</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">IOR</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_iron_material">
+<a class="viewcode-back" href="../../api/get_iron_material.html#pysdic_blender.get_iron_material">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_iron_material</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">BlenderMaterialBSDF</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Iron: dark gray, fully metallic, rougher than polished steel."""</span>
+    <span class="k">return</span> <span class="n">BlenderMaterialBSDF</span><span class="p">(</span><span class="n">base_color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">metallic</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">roughness</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">IOR</span><span class="o">=</span><span class="mf">2.9</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_copper_material">
+<a class="viewcode-back" href="../../api/get_copper_material.html#pysdic_blender.get_copper_material">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_copper_material</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">BlenderMaterialBSDF</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Copper: reddish orange, fully metallic, slightly rough."""</span>
+    <span class="k">return</span> <span class="n">BlenderMaterialBSDF</span><span class="p">(</span><span class="n">base_color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.955</span><span class="p">,</span> <span class="mf">0.637</span><span class="p">,</span> <span class="mf">0.538</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">metallic</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">roughness</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">IOR</span><span class="o">=</span><span class="mf">2.7</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_matte_paint_material">
+<a class="viewcode-back" href="../../api/get_matte_paint_material.html#pysdic_blender.get_matte_paint_material">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_matte_paint_material</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">BlenderMaterialBSDF</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    A matte white paint (diffuse, not metallic, rough): the usual surface of a speckle</span>
+<span class="sd">    pattern, whose gray levels barely depend on the point of view.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">BlenderMaterialBSDF</span><span class="p">(</span><span class="n">base_color</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">metallic</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">roughness</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
