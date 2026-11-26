@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysdic-blender"
+dynamic = ["version"]
+description = "Rendering of synthetic images for pysdic (stereo digital image correlation) with Blender"
+readme = "README.md"
+license = { text = "GPL-3.0-or-later" }
+authors = [{ name = "Artezaru", email = "artezaru.github@proton.me" }]
+# bpy supports exactly one version of Python per release of Blender: Blender 5.1 -> Python 3.13.
+# Change both pins together when moving to another release of Blender.
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "pysdic",
+    "numpy",
+    "scipy",
+    "bpy>=5.3.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.urls]
+Homepage = "https://github.com/Artezaru/pysdic-blender"
+
+[tool.setuptools.dynamic]
+version = { attr = "pysdic_blender.__version__.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pysdic_blender", "pysdic_blender*"]
