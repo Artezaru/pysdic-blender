@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:03.747** total execution time for 1 file **from _gallery**:
+**00:04.919** total execution time for 1 file **from _gallery**:
 
 .. container::
 
@@ -33,5 +33,5 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr__gallery_blender_rendering.py` (``blender_rendering.py``)
-     - 00:03.747
+     - 00:04.919
      - 0.0

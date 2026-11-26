@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Installation &#8212; pysdic-blender 1.1.0 documentation</title>
+    <title>Installation &#8212; pysdic-blender 1.2.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=fc837d61"></script>
+    <script src="_static/documentation_options.js?v=6efca38a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -127,7 +127,7 @@
   
   
   
-    <p class="title logo__title">pysdic-blender 1.1.0 documentation</p>
+    <p class="title logo__title">pysdic-blender 1.2.0 documentation</p>
   
 </a></div>
     
@@ -366,7 +366,9 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="#why-python-3-13" id="id1">Why Python 3.13?</a></p></li>
 <li><p><a class="reference internal" href="#required-dependencies" id="id2">Required dependencies</a></p></li>
-<li><p><a class="reference internal" href="#requirements-on-the-scene" id="id3">Requirements on the scene</a></p></li>
+<li><p><a class="reference internal" href="#import-pysdic-blender-before-using-open3d" id="id3">Import <code class="docutils literal notranslate"><span class="pre">pysdic_blender</span></code> before using open3d</a></p></li>
+<li><p><a class="reference internal" href="#rendering-on-a-server-without-display" id="id4">Rendering on a server without display</a></p></li>
+<li><p><a class="reference internal" href="#requirements-on-the-scene" id="id5">Requirements on the scene</a></p></li>
 </ul>
 </nav>
 <p><code class="docutils literal notranslate"><span class="pre">pysdic-blender</span></code> requires <strong>Python 3.13</strong>. To install it, you can use the following command:</p>
@@ -380,7 +382,7 @@
 <section id="why-python-3-13">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Why Python 3.13?</a><a class="headerlink" href="#why-python-3-13" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">bpy</span></code> (Blender as a Python module) is published for only one version of Python per Blender release:
-<code class="docutils literal notranslate"><span class="pre">bpy</span></code> 5.1 requires Python 3.13. <code class="docutils literal notranslate"><span class="pre">pysdic</span></code> supports Python 3.11 and later, so the rendering is kept in a separate
+<code class="docutils literal notranslate"><span class="pre">bpy</span></code> 5.3 requires Python 3.13. <code class="docutils literal notranslate"><span class="pre">pysdic</span></code> supports Python 3.11 and later, so the rendering is kept in a separate
 package to avoid imposing Python 3.13 on <code class="docutils literal notranslate"><span class="pre">pysdic</span></code>.</p>
 <p>Use a dedicated environment for the rendering, e.g.:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3.13<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>blender-env
@@ -397,9 +399,40 @@ pip<span class="w"> </span>install<span class="w"> </span>pysdic-blender
 <li><p><strong>bpy</strong> (<a class="reference external" href="https://pypi.org/project/bpy/">https://pypi.org/project/bpy/</a>): Blender as a Python module (Cycles renderer).</p></li>
 <li><p><strong>NumPy</strong> (<a class="reference external" href="https://numpy.org/">https://numpy.org/</a>): the arrays of the meshes, the textures and the rendered images.</p></li>
 </ul>
+<p><code class="docutils literal notranslate"><span class="pre">bpy</span></code> is imported when <code class="docutils literal notranslate"><span class="pre">pysdic_blender</span></code> is loaded: without it, <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">pysdic_blender</span></code> raises an
+<code class="docutils literal notranslate"><span class="pre">ImportError</span></code> that gives the original error.</p>
+</section>
+<section id="import-pysdic-blender-before-using-open3d">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Import <code class="docutils literal notranslate"><span class="pre">pysdic_blender</span></code> before using open3d</a><a class="headerlink" href="#import-pysdic-blender-before-using-open3d" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">bpy</span></code> and <code class="docutils literal notranslate"><span class="pre">open3d</span></code> (the optional dependency of <code class="docutils literal notranslate"><span class="pre">pysdic</span></code> for the ray casting) both bundle the library TBB, and
+a process can load only one of them. The version of <code class="docutils literal notranslate"><span class="pre">open3d</span></code> is older: if it is loaded first, <code class="docutils literal notranslate"><span class="pre">bpy</span></code> cannot be
+imported (<code class="docutils literal notranslate"><span class="pre">undefined</span> <span class="pre">symbol</span></code> in <code class="docutils literal notranslate"><span class="pre">libopenvdb</span></code>).</p>
+<p>Import <code class="docutils literal notranslate"><span class="pre">pysdic_blender</span></code> at the top of the scripts, before any function of <code class="docutils literal notranslate"><span class="pre">pysdic</span></code> that uses <code class="docutils literal notranslate"><span class="pre">open3d</span></code>
+(<a class="reference external" href="https://artezaru.github.io/pysdic/api/geometry/_generated/pysdic.Mesh.cast_rays.html#pysdic.Mesh.cast_rays" title="(in pysdic)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pysdic.Mesh.cast_rays()</span></code></a>, <a class="reference external" href="https://artezaru.github.io/pysdic/api/synthetic/generate_synthetic_image.html#pysdic.generate_synthetic_image" title="(in pysdic)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.generate_synthetic_image()</span></code></a> with a 3D mesh, …):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pysdic_blender</span>  <span class="c1"># First: loads bpy and its version of TBB</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pysdic</span>
+
+<span class="n">image</span> <span class="o">=</span> <span class="n">pysdic</span><span class="o">.</span><span class="n">generate_synthetic_image</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">texture</span><span class="p">)</span>  <span class="c1"># Imports open3d: OK</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">pysdic</span></code> imports <code class="docutils literal notranslate"><span class="pre">open3d</span></code> only at the first call of a feature that needs it: <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">pysdic</span></code> before
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">pysdic_blender</span></code> is fine, as long as no ray casting is done in between.</p>
+</div>
+</section>
+<section id="rendering-on-a-server-without-display">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Rendering on a server without display</a><a class="headerlink" href="#rendering-on-a-server-without-display" title="Link to this heading">#</a></h2>
+<p>On a Linux server or a CI runner without display (e.g. GitHub Actions), <code class="docutils literal notranslate"><span class="pre">bpy</span></code> and <code class="docutils literal notranslate"><span class="pre">open3d</span></code> need some system
+libraries that are not always installed. If the import fails with <code class="docutils literal notranslate"><span class="pre">cannot</span> <span class="pre">open</span> <span class="pre">shared</span> <span class="pre">object</span> <span class="pre">file</span></code>, install them,
+e.g. on Ubuntu:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>libegl1<span class="w"> </span>libgl1<span class="w"> </span>libgomp1<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>libx11-6<span class="w"> </span>libxrender1<span class="w"> </span>libxi6<span class="w"> </span>libxxf86vm1<span class="w"> </span>libxfixes3<span class="w"> </span>libxkbcommon0<span class="w"> </span>libsm6<span class="w"> </span>libice6
+</pre></div>
+</div>
 </section>
 <section id="requirements-on-the-scene">
-<h2><a class="toc-backref" href="#id3" role="doc-backlink">Requirements on the scene</a><a class="headerlink" href="#requirements-on-the-scene" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Requirements on the scene</a><a class="headerlink" href="#requirements-on-the-scene" title="Link to this heading">#</a></h2>
 <p>Blender only knows the pinhole camera model and splits non-planar polygons its own way. A scene is accepted only if:</p>
 <ul class="simple">
 <li><p>the <strong>camera</strong> follows the OpenCV pinhole model: a <a class="reference external" href="https://artezaru.github.io/pysdic/api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.PerspectiveExtrinsic</span></code></a>, a
@@ -459,6 +492,8 @@ pip<span class="w"> </span>install<span class="w"> </span>pysdic-blender
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-python-3-13">Why Python 3.13?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#required-dependencies">Required dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-pysdic-blender-before-using-open3d">Import <code class="docutils literal notranslate"><span class="pre">pysdic_blender</span></code> before using open3d</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rendering-on-a-server-without-display">Rendering on a server without display</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements-on-the-scene">Requirements on the scene</a></li>
 </ul>
   </nav></div>
