@@ -23,6 +23,7 @@ import tempfile
 from numbers import Integral, Real
 from typing import Any, ClassVar, Dict, Optional, Sequence, Tuple, Union
 
+import bpy
 import numpy
 from numpy.typing import ArrayLike
 
@@ -37,26 +38,6 @@ from .blender_spotlight import BlenderSpotLight
 # =============================================================================
 # Internal helpers
 # =============================================================================
-def _import_bpy():
-    try:
-        import bpy
-    except ImportError as error:
-        cause = f"{type(error).__name__}: {error}"
-        if isinstance(error, ModuleNotFoundError) and error.name == "bpy":
-            message = (
-                "Missing 'bpy' (Blender as a Python module): install it with 'pip install bpy'. "
-                "Each release of bpy supports exactly one version of Python (e.g. bpy 5.1 for Python 3.13): "
-                f"use the version of Python of the release of Blender. Original error: {cause}"
-            )
-        else:
-            message = (
-                "The 'bpy' package is installed but cannot be imported (missing system library, "
-                f"wrong version of Python, ...). Original error: {cause}"
-            )
-        raise ImportError(message) from error
-    return bpy
-
-
 def _validate_name(name: str, kind: str) -> str:
     # Name of a Blender object: a string of at most 50 characters (Blender limits the names to
     # 63 characters, and suffixes are added to the data blocks of the object)
@@ -143,7 +124,6 @@ class BlenderExperiment(object):
         background_color: ArrayLike = (1.0, 1.0, 1.0),
         background_strength: Real = 0.0,
     ) -> None:
-        bpy = _import_bpy()
         bpy.ops.wm.read_factory_settings(use_empty=True)  # Empty scene, default preferences
         BlenderExperiment._current = self
         self._cameras: Dict[str, BlenderCamera] = {}
@@ -154,14 +134,6 @@ class BlenderExperiment(object):
     # ===================================================================
     # Internal
     # ===================================================================
-    def _bpy(self) -> Any:
-        # The module bpy, after checking that this experiment owns the state of Blender
-        if BlenderExperiment._current is not self:
-            raise RuntimeError(
-                "This BlenderExperiment is no longer active: a newer one has cleared the data of Blender."
-            )
-        return _import_bpy()
-
     def _check_new_name(self, bpy: Any, name: str, kind: str) -> str:
         name = _validate_name(name, kind)
         if name in bpy.data.objects:
@@ -175,7 +147,6 @@ class BlenderExperiment(object):
         obj.rotation_quaternion = tuple(float(v) for v in quaternion)
 
     def _remove_object(self, name: str, registry: Dict[str, Any], kind: str) -> None:
-        bpy = self._bpy()
         if name not in registry:
             raise KeyError(f"No {kind} named {name!r} in the experiment. Available: {sorted(registry)}.")
         obj = bpy.data.objects[name]
@@ -217,7 +188,6 @@ class BlenderExperiment(object):
         Set the world of the scene: a uniform ambient light of an RGB ``color`` and a
         ``strength`` (non-negative, 0 for no ambient light).
         """
-        bpy = self._bpy()
         color = _as_array(color, "color", numpy.float64, shape=(3,), finite=True)
         strength = _validate_real(strength, "strength", non_negative=True, finite=True)
         scene = bpy.context.scene
@@ -233,7 +203,6 @@ class BlenderExperiment(object):
     # ===================================================================
     def add_camera(self, name: str, camera: BlenderCamera) -> None:
         r"""Add a camera (see :class:`BlenderCamera`) to the scene, under a unique ``name``."""
-        bpy = self._bpy()
         name = self._check_new_name(bpy, name, "camera")
         if not isinstance(camera, BlenderCamera):
             raise TypeError(f"Input 'camera' must be a BlenderCamera. Got type {type(camera)}.")
@@ -275,7 +244,6 @@ class BlenderExperiment(object):
         of the shader: a float image of Blender with the reflectances (linear values, no color
         transform).
         """
-        bpy = self._bpy()
         name = self._check_new_name(bpy, name, "mesh")
         if not isinstance(mesh, BlenderMesh):
             raise TypeError(f"Input 'mesh' must be a BlenderMesh. Got type {type(mesh)}.")
@@ -330,7 +298,6 @@ class BlenderExperiment(object):
         triangles and UV coordinates (see :meth:`BlenderMesh.has_same_topology`), e.g. the mesh
         displaced by the displacement of another frame. The texture and the material are kept.
         """
-        bpy = self._bpy()
         if name not in self._meshes:
             raise KeyError(f"No mesh named {name!r} in the experiment. Available: {sorted(self._meshes)}.")
         if not self._meshes[name].has_same_topology(mesh):
@@ -355,7 +322,6 @@ class BlenderExperiment(object):
     # ===================================================================
     def add_spotlight(self, name: str, spotlight: BlenderSpotLight) -> None:
         r"""Add a spot light (see :class:`BlenderSpotLight`) to the scene, under a unique ``name``."""
-        bpy = self._bpy()
         name = self._check_new_name(bpy, name, "spot light")
         if not isinstance(spotlight, BlenderSpotLight):
             raise TypeError(f"Input 'spotlight' must be a BlenderSpotLight. Got type {type(spotlight)}.")
@@ -424,7 +390,6 @@ class BlenderExperiment(object):
             rows of the image from top to bottom (pysdic convention).
 
         """
-        bpy = self._bpy()
         blender_camera = self.get_camera(camera)
         n_samples = _validate_integer(n_samples, "n_samples", min_value=1)
         filter_width = _validate_real(filter_width, "filter_width", positive=True, finite=True)

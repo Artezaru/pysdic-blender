@@ -4,6 +4,10 @@
 import os
 import sys
 
+# bpy must be imported before open3d: both bundle libtbb, and the older one of open3d
+# breaks bpy (undefined TBB symbol in libopenvdb) if it is loaded first.
+import bpy  # noqa: F401
+
 sys.path.insert(0, os.path.abspath("../.."))
 
 import datetime

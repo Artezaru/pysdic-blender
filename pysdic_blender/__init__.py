@@ -16,6 +16,27 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+# bpy is imported first, when pysdic_blender is loaded: it must be imported before open3d
+# (lazily imported by pysdic for the ray casting), both bundle libtbb and the older one of
+# open3d breaks bpy (undefined TBB symbol in libopenvdb) if it is loaded first.
+try:
+    import bpy  # noqa: F401
+except ImportError as error:
+    cause = f"{type(error).__name__}: {error}"
+    if isinstance(error, ModuleNotFoundError) and error.name == "bpy":
+        message = (
+            "Missing 'bpy' (Blender as a Python module): install it with 'pip install bpy'. "
+            "Each release of bpy supports exactly one version of Python (e.g. bpy 5.3 for Python 3.13): "
+            f"use the version of Python of the release of Blender. Original error: {cause}"
+        )
+    else:
+        message = (
+            "The 'bpy' package is installed but cannot be imported (missing system library, conflict "
+            "with a library already loaded, e.g. open3d imported before pysdic_blender, ...). "
+            f"Original error: {cause}"
+        )
+    raise ImportError(message) from error
+
 # Rendering of synthetic images for pysdic with Blender (Cycles), as a complement of
 # pysdic.generate_synthetic_image (exact gray levels of the texture, without lighting).
 #
