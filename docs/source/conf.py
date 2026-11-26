@@ -27,9 +27,10 @@ sys.path.insert(0, doc_source_directory)
 
 def read_version():
     version_file = os.path.join(project_directory, "pysdic_blender", "__version__.py")
+    namespace = {}
     with open(version_file, "r") as file:
-        exec(file.read())
-    return locals()["__version__"]
+        exec(file.read(), namespace)
+    return namespace["__version__"]
 
 
 project = "pysdic-blender"
