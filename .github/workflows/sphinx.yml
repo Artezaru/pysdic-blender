@@ -57,6 +57,9 @@ jobs:
           pip install .[all]
           pip install pysdic["open3d"]
 
+      - name: Check open3d
+        run: python -c "import open3d; print(open3d.__version__)"
+
       - name: Build documentation
         run: sphinx-build -b html "$DOCS_SOURCE" public/
 
