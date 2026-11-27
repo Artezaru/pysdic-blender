@@ -23,12 +23,17 @@ A Blender scene is built from the objects of ``pysdic``:
    Camera ──────────────────────► BlenderCamera ──────┐
    Mesh (triangle_3) + texture ─► BlenderMesh ────────┤
                                   BlenderMaterialBSDF ┼─► BlenderExperiment ──► render(camera) ──► image
-                                  BlenderSpotLight ───┘
+                                  BlenderSpotLight ───┤
+                                  BlenderAreaLight ───┘
 
 The pose of the camera is converted from the OpenCV convention (:math:`z` forward, :math:`y` down) to the Blender
 convention (:math:`z` backward, :math:`y` up): with the world-to-camera rotation :math:`R` and translation
 :math:`\vec{t}` of the extrinsic, the center of the camera is :math:`\vec{C} = -R^T \vec{t}` and its orientation in
 Blender is :math:`R^T \, \text{diag}(1, -1, -1)`.
+
+The render is a linear intensity (float64, no quantization): a weighted sum of the RGB channels of Cycles for a
+monochrome sensor (``channel_weights``), or the RGB image with ``color=True``. The gray levels, the noise and the
+quantization of the sensor are added in ``pysdic``.
 
 .. note::
 
@@ -53,7 +58,7 @@ Experiment
 Camera and mesh
 ---------------
 
-- :doc:`BlenderCamera <api/BlenderCamera>`: A Blender camera from a :class:`pysdic.Camera` (OpenCV pinhole model only).
+- :doc:`BlenderCamera <api/BlenderCamera>`: A Blender camera from a :class:`pysdic.Camera` (OpenCV pinhole model only), with an optional depth of field.
 - :doc:`BlenderMesh <api/BlenderMesh>`: A Blender mesh from a ``triangle_3`` :class:`pysdic.Mesh` with its UV map and its texture.
 
 .. toctree::
@@ -91,10 +96,12 @@ Materials
 Lights
 ------
 
-- :doc:`BlenderSpotLight <api/BlenderSpotLight>`: A spot light, created from its position and direction or with ``looking_at``.
+- :doc:`BlenderSpotLight <api/BlenderSpotLight>`: A spot light (cone of light from an emitting sphere), created from its position and direction or with ``looking_at``.
+- :doc:`BlenderAreaLight <api/BlenderAreaLight>`: An area light (square, rectangle, disk or ellipse emitting from one side), e.g. an LED panel.
 
 .. toctree::
    :maxdepth: 1
    :hidden:
 
    ./api/BlenderSpotLight.rst
+   ./api/BlenderAreaLight.rst

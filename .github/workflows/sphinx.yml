@@ -61,6 +61,7 @@ jobs:
           pip install $DOCS_REQUIREMENTS
           pip install .[all]
           pip install open3d
+          pip install py3dframe
 
       - name: Check open3d
         run: python -c "import open3d; print(open3d.__version__)"

@@ -31,3 +31,6 @@ version = { attr = "pysdic_blender.__version__.__version__" }
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["pysdic_blender", "pysdic_blender*"]
+
+[tool.pytest.ini_options]
+addopts = "-p no:dash"

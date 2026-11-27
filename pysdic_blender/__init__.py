@@ -40,13 +40,16 @@ except ImportError as error:
 # Rendering of synthetic images for pysdic with Blender (Cycles), as a complement of
 # pysdic.generate_synthetic_image (exact gray levels of the texture, without lighting).
 #
-# - BlenderCamera: a pysdic.Camera of the OpenCV pinhole model, without distortion (checked);
+# - BlenderCamera: a pysdic.Camera of the OpenCV pinhole model, without distortion (checked),
+#   with an optional depth of field;
 # - BlenderMesh: a 3D triangle_3 pysdic.Mesh, displaced, with its UV map and its texture;
 # - BlenderMaterialBSDF: the parameters of the Principled BSDF shader, default materials;
-# - BlenderSpotLight: a spot light;
+# - BlenderSpotLight: a spot light (cone, emitting sphere of a given radius);
+# - BlenderAreaLight: an area light (square, rectangle, disk or ellipse);
 # - BlenderExperiment: a scene rendered from its cameras; render_blender_image: one image.
 #
-# The conversions do not import bpy: it is imported at the creation of the first experiment.
+# The description objects (cameras, meshes, materials, lights) only use numpy: only
+# BlenderExperiment calls bpy (imported above, at the loading of the package).
 
 from .__version__ import __version__
 from .blender_camera import BlenderCamera
@@ -61,6 +64,7 @@ from .blender_material import (
     get_titanium_material,
 )
 from .blender_spotlight import BlenderSpotLight
+from .blender_arealight import BlenderAreaLight
 from .blender_experiment import BlenderExperiment, render_blender_image
 
 __all__ = [
@@ -75,6 +79,7 @@ __all__ = [
     "get_steel_material",
     "get_titanium_material",
     "BlenderSpotLight",
+    "BlenderAreaLight",
     "BlenderExperiment",
     "render_blender_image",
 ]

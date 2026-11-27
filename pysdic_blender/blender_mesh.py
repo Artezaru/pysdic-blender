@@ -18,7 +18,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from __future__ import annotations
 
-from typing import Optional, Tuple, Union
+import json
+from typing import Any, Dict, Optional, Tuple, Union
 
 import numpy
 from numpy.typing import ArrayLike
@@ -27,6 +28,38 @@ from pysdic import Image, Mesh
 from ._validation import _as_array, _validate_bool, _validate_choice
 
 
+# =============================================================================
+# Internal helpers
+# =============================================================================
+def _as_float_array(value: Any, name: str, shape: Tuple[Optional[int], ...]) -> numpy.ndarray:
+    # Finite float64 array with a shape where None is any size
+    array = numpy.asarray(value, dtype=numpy.float64)
+    if array.ndim != len(shape) or any(s is not None and n != s for n, s in zip(array.shape, shape)):
+        expected = "(" + ", ".join("N" if s is None else str(s) for s in shape) + ")"
+        raise ValueError(f"Input '{name}' must have the shape {expected}. Got shape {array.shape}.")
+    if not numpy.all(numpy.isfinite(array)):
+        raise ValueError(f"Input '{name}' must have finite values.")
+    return array
+
+
+def _as_faces(value: Any, n_vertices: int) -> numpy.ndarray:
+    # Triangles (N_e, 3) of integer indices in [0, N_v)
+    array = numpy.asarray(value)
+    if array.ndim != 2 or array.shape[1] != 3:
+        raise ValueError(f"Input 'faces' must have the shape (N_e, 3). Got shape {array.shape}.")
+    if array.size > 0 and not numpy.issubdtype(array.dtype, numpy.integer):
+        raise TypeError(f"Input 'faces' must contain integers. Got dtype {array.dtype}.")
+    array = array.astype(numpy.int64)
+    if array.size > 0 and (array.min() < 0 or array.max() >= n_vertices):
+        raise ValueError(
+            f"Input 'faces' must contain indices in [0, {n_vertices}). Got [{array.min()}, {array.max()}]."
+        )
+    return array
+
+
+# =============================================================================
+# Mesh
+# =============================================================================
 class BlenderMesh(object):
     r"""
     The geometry and the texture of a surface to render with Blender, extracted from a
@@ -52,6 +85,11 @@ class BlenderMesh(object):
 
     The texture is multiplied by the base color of the material of the mesh (see
     :class:`BlenderMaterialBSDF`). The object is immutable (read-only copies).
+
+    **Export.** :meth:`to_dict` / :meth:`to_json` save the extracted data above (not the
+    :class:`pysdic.Mesh`); :meth:`from_dict` / :meth:`from_json` rebuild the Blender mesh from
+    them. With a texture, the file contains all the :math:`H_t \times W_t` reflectances (a large
+    JSON file for a large texture).
 
     Parameters
     ----------
@@ -92,6 +130,8 @@ class BlenderMesh(object):
         from pysdic_blender import BlenderMesh
 
         blender_mesh = BlenderMesh(mesh, displacement=analysis.get_displacement(1), texture=speckle)
+        blender_mesh.to_json("mesh_frame_1.json")
+        same_mesh = BlenderMesh.from_json("mesh_frame_1.json")
 
     """
 
@@ -121,17 +161,14 @@ class BlenderMesh(object):
             )
         if not numpy.all(numpy.isfinite(coordinates)):
             raise ValueError("The vertices of the mesh (with the displacement) must be finite.")
-        self._coordinates = coordinates
-        self._faces = numpy.array(mesh.elements, dtype=numpy.int64)
-        self._interpolation = _validate_choice(interpolation, "interpolation", ("Closest", "Linear", "Cubic"))
-        self._smooth = _validate_bool(smooth, "smooth")
 
-        self._uv = None
+        uv = None
         if mesh.uvmap is not None:
-            self._uv = numpy.array(mesh.uvmap, dtype=numpy.float64).reshape(mesh.n_elements, 3, 2)
-        self._albedo = None
+            uv = numpy.array(mesh.uvmap, dtype=numpy.float64).reshape(mesh.n_elements, 3, 2)
+
+        albedo = None
         if texture is not None:
-            if self._uv is None:
+            if uv is None:
                 raise ValueError("The mesh must have a UV map ('mesh.uvmap') to be rendered with a texture.")
             data = texture.image if isinstance(texture, Image) else numpy.asarray(texture)
             data = numpy.asarray(data, dtype=numpy.float64)
@@ -144,8 +181,37 @@ class BlenderMesh(object):
                 raise ValueError(f"Input 'texture_range' must satisfy min < max. Got ({g_min}, {g_max}).")
             if not numpy.all(numpy.isfinite(data)):
                 raise ValueError("Input 'texture' must have finite values.")
-            self._albedo = numpy.clip((data - g_min) / (g_max - g_min), 0.0, 1.0)
+            albedo = numpy.clip((data - g_min) / (g_max - g_min), 0.0, 1.0)
 
+        self._setup(coordinates, mesh.elements, uv, albedo, interpolation, smooth)
+
+    def _setup(
+        self,
+        coordinates: ArrayLike,
+        faces: ArrayLike,
+        uv: Optional[ArrayLike],
+        albedo: Optional[ArrayLike],
+        interpolation: str,
+        smooth: bool,
+    ) -> None:
+        # Validate and store the data (shared by __init__ and from_dict), as read-only copies
+        self._coordinates = _as_float_array(coordinates, "coordinates", (None, 3)).copy()
+        self._faces = _as_faces(faces, self._coordinates.shape[0]).copy()
+        n_faces = self._faces.shape[0]
+        self._uv = None if uv is None else _as_float_array(uv, "uv", (n_faces, 3, 2)).copy()
+        self._albedo = None
+        if albedo is not None:
+            if self._uv is None:
+                raise ValueError("A mesh with a texture ('albedo') must have UV coordinates ('uv').")
+            self._albedo = _as_float_array(albedo, "albedo", (None, None)).copy()
+            if self._albedo.size == 0:
+                raise ValueError("Input 'albedo' must not be empty.")
+            if self._albedo.min() < 0.0 or self._albedo.max() > 1.0:
+                raise ValueError(
+                    f"Input 'albedo' must be in [0, 1]. Got [{self._albedo.min()}, {self._albedo.max()}]."
+                )
+        self._interpolation = _validate_choice(interpolation, "interpolation", ("Closest", "Linear", "Cubic"))
+        self._smooth = _validate_bool(smooth, "smooth")
         for array in (self._coordinates, self._faces, self._uv, self._albedo):
             if array is not None:
                 array.setflags(write=False)
@@ -154,34 +220,73 @@ class BlenderMesh(object):
         texture = "no texture" if self._albedo is None else f"texture {self._albedo.shape[1]}x{self._albedo.shape[0]}"
         return f"BlenderMesh({self.n_vertices} vertices, {self.n_faces} triangles, {texture})"
 
+    # ===================================================================
+    # Data
+    # ===================================================================
     @property
     def coordinates(self) -> numpy.ndarray:
-        r"""The (displaced) vertices :math:`(N_v, 3)` (read-only)."""
+        r"""
+        The vertices :math:`(N_v, 3)` given to Blender (float64, read-only): the vertices of the
+        :class:`pysdic.Mesh` plus ``displacement``, in the unit of the scene (the unit of the
+        cameras and the lights).
+        """
         return self._coordinates
 
     @property
     def faces(self) -> numpy.ndarray:
-        r"""The triangles :math:`(N_e, 3)` (read-only)."""
+        r"""
+        The triangles :math:`(N_e, 3)` (int64, read-only): the indices (from 0) in
+        :attr:`coordinates` of the vertices of each triangle, in the order of
+        :attr:`pysdic.Mesh.elements`.
+
+        Each triangle is a polygon of Blender whose loops follow this order: the normal of the
+        triangle is given by the right-hand rule, :math:`(\vec{X}_1 - \vec{X}_0) \times
+        (\vec{X}_2 - \vec{X}_0)`. Blender renders both sides of the faces.
+        """
         return self._faces
 
     @property
     def uv(self) -> Optional[numpy.ndarray]:
-        r"""The UV coordinates :math:`(N_e, 3, 2)` of the vertices of each triangle, or None (read-only)."""
+        r"""
+        The UV coordinates :math:`(N_e, 3, 2)` (float64, read-only), or None without UV map.
+
+        ``uv[i, j]`` is the :math:`(u, v)` of the vertex ``faces[i, j]`` in the triangle
+        :math:`i` (a value per loop of Blender, so a vertex can have different UV coordinates in
+        different triangles, e.g. along a seam). OpenGL convention: :math:`(u, v) \in [0, 1]^2`,
+        :math:`u` to the right and :math:`v` upwards in the texture.
+        """
         return self._uv
 
     @property
     def albedo(self) -> Optional[numpy.ndarray]:
-        r"""The reflectance of the texture :math:`(H_t, W_t)` in :math:`[0, 1]`, or None (read-only)."""
+        r"""
+        The reflectance :math:`(H_t, W_t)` of the texture in :math:`[0, 1]` (float64,
+        read-only), or None without texture.
+
+        :math:`\rho = \text{clip}((g - g_{min}) / (g_{max} - g_{min}), 0, 1)` with
+        ``texture_range``. The first row is :math:`v = 1` (pysdic convention): the rows are
+        flipped when the texture is given to Blender (first row at :math:`v = 0`). It is
+        **not** multiplied by the base color of the material, which is applied in
+        :meth:`BlenderExperiment.add_mesh`.
+        """
         return self._albedo
 
     @property
     def interpolation(self) -> str:
-        r"""The interpolation of the texture by Blender."""
+        r"""
+        The interpolation of the texture by Blender (``interpolation`` of the Image Texture
+        node): ``"Closest"`` (nearest texel), ``"Linear"`` (bilinear) or ``"Cubic"`` (bicubic).
+        Outside :math:`[0, 1]^2`, the texture is extended with its border texels.
+        """
         return self._interpolation
 
     @property
     def smooth(self) -> bool:
-        r"""Whether the shading interpolates the normals of the vertices."""
+        r"""
+        Whether the shading interpolates the normals of the vertices (``use_smooth`` of the
+        polygons of Blender). Only the normal used for the shading changes, not the geometry: the
+        silhouette and the shadows stay those of the flat triangles.
+        """
         return self._smooth
 
     @property
@@ -206,3 +311,71 @@ class BlenderMesh(object):
             self._uv is not None and other._uv is not None and numpy.array_equal(self._uv, other._uv)
         )
         return self.n_vertices == other.n_vertices and numpy.array_equal(self._faces, other._faces) and same_uv
+
+    # ===================================================================
+    # Export
+    # ===================================================================
+    def to_dict(self, description: Optional[str] = None) -> Dict[str, Any]:
+        r"""
+        Export the mesh to a dictionary: ``{"type": "BlenderMesh", "description": ...,
+        "coordinates", "faces", "uv", "albedo", "interpolation", "smooth"}`` (nested lists;
+        ``uv`` and ``albedo`` only if not None).
+
+        The data are those given to Blender (displaced vertices, reflectances of the texture),
+        not the :class:`pysdic.Mesh` nor the gray levels of the texture.
+        """
+        data: Dict[str, Any] = {"type": "BlenderMesh"}
+        if description is not None:
+            if not isinstance(description, str):
+                raise TypeError(f"Input 'description' must be a string. Got type {type(description)}.")
+            data["description"] = description
+        data["coordinates"] = self._coordinates.tolist()
+        data["faces"] = self._faces.tolist()
+        if self._uv is not None:
+            data["uv"] = self._uv.tolist()
+        if self._albedo is not None:
+            data["albedo"] = self._albedo.tolist()
+        data["interpolation"] = self._interpolation
+        data["smooth"] = self._smooth
+        return data
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> BlenderMesh:
+        r"""
+        Create a mesh from a dictionary of :meth:`to_dict`.
+
+        ``coordinates`` and ``faces`` are required; ``uv`` and ``albedo`` are None if absent,
+        ``interpolation`` is ``"Linear"`` and ``smooth`` is False if absent. ``albedo`` is the
+        reflectance in :math:`[0, 1]` (no ``texture_range``). ``type`` and ``description`` are
+        ignored, an unknown key raises a ``KeyError``.
+        """
+        if not isinstance(data, dict):
+            raise TypeError(f"Input 'data' must be a dictionary. Got type {type(data)}.")
+        allowed = {"type", "description", "coordinates", "faces", "uv", "albedo", "interpolation", "smooth"}
+        missing = [key for key in ("coordinates", "faces") if key not in data]
+        if missing:
+            raise KeyError(f"Missing fields of a BlenderMesh: {missing}.")
+        unknown = sorted(set(data) - allowed)
+        if unknown:
+            raise KeyError(f"Unknown fields of a BlenderMesh: {unknown}.")
+        mesh = cls.__new__(cls)
+        mesh._setup(
+            data["coordinates"],
+            data["faces"],
+            data.get("uv"),
+            data.get("albedo"),
+            data.get("interpolation", "Linear"),
+            data.get("smooth", False),
+        )
+        return mesh
+
+    def to_json(self, path: str, description: Optional[str] = None) -> None:
+        r"""Export the mesh to a JSON file (see :meth:`to_dict`)."""
+        with open(path, "w") as file:
+            json.dump(self.to_dict(description), file)
+
+    @classmethod
+    def from_json(cls, path: str) -> BlenderMesh:
+        r"""Create a mesh from a JSON file (see :meth:`from_dict`)."""
+        with open(path, "r") as file:
+            return cls.from_dict(json.load(file))

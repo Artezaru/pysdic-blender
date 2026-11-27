@@ -28,7 +28,8 @@ import numpy
 from numpy.typing import ArrayLike
 
 from pysdic import Camera, Image, Mesh
-from ._validation import _as_array, _validate_choice, _validate_integer, _validate_real
+from ._validation import _as_array, _validate_bool, _validate_choice, _validate_integer, _validate_real
+from .blender_arealight import BlenderAreaLight
 from .blender_camera import BlenderCamera
 from .blender_material import BlenderMaterialBSDF
 from .blender_mesh import BlenderMesh
@@ -48,6 +49,17 @@ def _validate_name(name: str, kind: str) -> str:
     return name
 
 
+def _set_checked(data: Any, attribute: str, value: float, label: str, hint: str = "") -> None:
+    # Set a float property of Blender and check that Blender did not clamp it (float32 storage)
+    setattr(data, attribute, value)
+    stored = float(getattr(data, attribute))
+    if not numpy.isclose(stored, value, rtol=1e-6, atol=0.0):
+        raise RuntimeError(
+            f"Blender stored {stored!r} for the {label} ({attribute}) instead of {value!r}: the value is outside of "
+            f"the range accepted by Blender.{hint}"
+        )
+
+
 def _enable_gpu(bpy: Any, backend: str) -> None:
     # Enable the GPU devices of a backend of Cycles (CUDA, OPTIX, HIP, METAL, ONEAPI)
     preferences = bpy.context.preferences.addons["cycles"].preferences
@@ -65,10 +77,11 @@ def _enable_gpu(bpy: Any, backend: str) -> None:
 # =============================================================================
 class BlenderExperiment(object):
     r"""
-    A Blender scene of cameras, meshes and spot lights, rendered with Cycles.
+    A Blender scene of cameras, meshes, spot lights and area lights, rendered with Cycles.
 
     The objects of pysdic are converted when they are added (see :class:`BlenderCamera`,
-    :class:`BlenderMesh`, :class:`BlenderMaterialBSDF`, :class:`BlenderSpotLight`). The scene is
+    :class:`BlenderMesh`, :class:`BlenderMaterialBSDF`, :class:`BlenderSpotLight`,
+    :class:`BlenderAreaLight`). The scene is
     rendered from one camera at a time with :meth:`render`, which returns the image as an array.
 
     For a sequence of frames, update the scene between the renders, e.g. the vertices of a mesh
@@ -83,11 +96,15 @@ class BlenderExperiment(object):
         (factory settings, empty scene), and only the last created experiment can be used (the
         previous ones raise an error).
 
-    **Colors.** The render is saved in OpenEXR (32-bit float, scene-linear values, without the
-    tone curve of the view transform) and returned as a linear intensity: the mean of the RGB
-    channels. Map it to gray levels and quantize it in pysdic (e.g. a gain, then
-    :func:`pysdic.add_gaussian_noise` and :func:`pysdic.quantize_image`), as for
-    :func:`pysdic.generate_synthetic_image`.
+    **Colors.** Cycles renders in RGB (scene-linear Rec.709, float32): the colors come from the
+    materials (``base_color``, tints, emission), the lights (``color``) and the world. The
+    render goes through a lossless 32-bit float OpenEXR file (exact copy of the float32 buffer
+    of Cycles, without the tone curve of the view transform) and is returned as a linear
+    intensity: by default a weighted sum of the RGB channels (a monochrome sensor, see
+    ``channel_weights`` in :meth:`render`), or the RGB image with ``color=True``. Map it to gray
+    levels and quantize it in pysdic (e.g. a gain, then :func:`pysdic.add_gaussian_noise` and
+    :func:`pysdic.quantize_image`), as for :func:`pysdic.generate_synthetic_image`: Blender
+    never quantizes the render.
 
     Parameters
     ----------
@@ -129,6 +146,7 @@ class BlenderExperiment(object):
         self._cameras: Dict[str, BlenderCamera] = {}
         self._meshes: Dict[str, BlenderMesh] = {}
         self._spotlights: Dict[str, BlenderSpotLight] = {}
+        self._arealights: Dict[str, BlenderAreaLight] = {}
         self.set_background(background_color, background_strength)
 
     # ===================================================================
@@ -183,6 +201,11 @@ class BlenderExperiment(object):
         r"""The names of the spot lights."""
         return tuple(self._spotlights)
 
+    @property
+    def arealight_names(self) -> Tuple[str, ...]:
+        r"""The names of the area lights."""
+        return tuple(self._arealights)
+
     def set_background(self, color: ArrayLike = (1.0, 1.0, 1.0), strength: Real = 0.0) -> None:
         r"""
         Set the world of the scene: a uniform ambient light of an RGB ``color`` and a
@@ -193,7 +216,8 @@ class BlenderExperiment(object):
         scene = bpy.context.scene
         if scene.world is None:
             scene.world = bpy.data.worlds.new("[pysdic]_world")
-        scene.world.use_nodes = True
+        if bpy.app.version < (5, 0, 0):  # Since Blender 5.0, the worlds always use nodes
+            scene.world.use_nodes = True
         background = scene.world.node_tree.nodes["Background"]
         background.inputs["Color"].default_value = (*color.tolist(), 1.0)
         background.inputs["Strength"].default_value = strength
@@ -202,7 +226,11 @@ class BlenderExperiment(object):
     # Cameras
     # ===================================================================
     def add_camera(self, name: str, camera: BlenderCamera) -> None:
-        r"""Add a camera (see :class:`BlenderCamera`) to the scene, under a unique ``name``."""
+        r"""
+        Add a camera (see :class:`BlenderCamera`) to the scene, under a unique ``name``, with its
+        depth of field if it has one (``dof.aperture_fstop`` and ``dof.focus_distance``, circular
+        aperture).
+        """
         name = self._check_new_name(bpy, name, "camera")
         if not isinstance(camera, BlenderCamera):
             raise TypeError(f"Input 'camera' must be a BlenderCamera. Got type {type(camera)}.")
@@ -217,6 +245,16 @@ class BlenderExperiment(object):
         data.shift_y = camera.shift_y
         data.clip_start = camera.clip_start
         data.clip_end = camera.clip_end
+        data.dof.use_dof = camera.use_dof
+        if camera.use_dof:
+            data.dof.focus_object = None
+            _set_checked(data.dof, "focus_distance", camera.focus_distance, f"camera {name!r}")
+            _set_checked(
+                data.dof, "aperture_fstop", camera.aperture_fstop, f"camera {name!r}",
+                " The f-stop of Blender is proportional to 'lens': increase 'pixel_size' of the BlenderCamera.",
+            )
+            data.dof.aperture_blades = 0  # Circular aperture
+            data.dof.aperture_ratio = 1.0
         obj = bpy.data.objects.new(name, data)
         self._set_pose(obj, camera.location, camera.quaternion)
         bpy.context.scene.collection.objects.link(obj)
@@ -263,7 +301,8 @@ class BlenderExperiment(object):
 
         # Material: Principled BSDF, base color from the texture (times the base color of the material)
         blender_material = bpy.data.materials.new(f"[pysdic]_{name}_mat")
-        blender_material.use_nodes = True
+        if bpy.app.version < (5, 0, 0):  # Since Blender 5.0, the materials always use nodes
+            blender_material.use_nodes = True
         nodes = blender_material.node_tree.nodes
         principled = nodes.get("Principled BSDF")
         if principled is None:
@@ -321,7 +360,11 @@ class BlenderExperiment(object):
     # Spot lights
     # ===================================================================
     def add_spotlight(self, name: str, spotlight: BlenderSpotLight) -> None:
-        r"""Add a spot light (see :class:`BlenderSpotLight`) to the scene, under a unique ``name``."""
+        r"""
+        Add a spot light (see :class:`BlenderSpotLight`) to the scene, under a unique ``name``: a
+        sphere of radius ``spotlight.radius`` (``shadow_soft_size``), without the soft falloff of
+        Blender (physically correct sphere).
+        """
         name = self._check_new_name(bpy, name, "spot light")
         if not isinstance(spotlight, BlenderSpotLight):
             raise TypeError(f"Input 'spotlight' must be a BlenderSpotLight. Got type {type(spotlight)}.")
@@ -329,6 +372,9 @@ class BlenderExperiment(object):
         data.energy = spotlight.energy
         data.spot_size = spotlight.spot_size
         data.spot_blend = spotlight.spot_blend
+        data.color = tuple(float(v) for v in spotlight.color)
+        data.shadow_soft_size = spotlight.radius
+        data.use_soft_falloff = False
         obj = bpy.data.objects.new(name, data)
         self._set_pose(obj, spotlight.position, spotlight.quaternion)
         bpy.context.scene.collection.objects.link(obj)
@@ -345,12 +391,45 @@ class BlenderExperiment(object):
         self._remove_object(name, self._spotlights, "spot light")
 
     # ===================================================================
+    # Area lights
+    # ===================================================================
+    def add_arealight(self, name: str, arealight: BlenderAreaLight) -> None:
+        r"""Add an area light (see :class:`BlenderAreaLight`) to the scene, under a unique ``name``."""
+        name = self._check_new_name(bpy, name, "area light")
+        if not isinstance(arealight, BlenderAreaLight):
+            raise TypeError(f"Input 'arealight' must be a BlenderAreaLight. Got type {type(arealight)}.")
+        data = bpy.data.lights.new(name, type="AREA")
+        data.energy = arealight.energy
+        data.color = tuple(float(v) for v in arealight.color)
+        data.shape = arealight.shape
+        data.size = arealight.size
+        if arealight.size_y is not None:
+            data.size_y = arealight.size_y
+        _set_checked(data, "spread", arealight.spread, f"area light {name!r}")
+        obj = bpy.data.objects.new(name, data)
+        self._set_pose(obj, arealight.position, arealight.quaternion)
+        bpy.context.scene.collection.objects.link(obj)
+        self._arealights[name] = arealight
+
+    def get_arealight(self, name: str) -> BlenderAreaLight:
+        r"""The area light named ``name``."""
+        if name not in self._arealights:
+            raise KeyError(f"No area light named {name!r} in the experiment. Available: {sorted(self._arealights)}.")
+        return self._arealights[name]
+
+    def remove_arealight(self, name: str) -> None:
+        r"""Remove the area light named ``name`` from the scene."""
+        self._remove_object(name, self._arealights, "area light")
+
+    # ===================================================================
     # Render
     # ===================================================================
     def render(
         self,
         camera: str,
         *,
+        color: bool = False,
+        channel_weights: ArrayLike = (1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0),
         n_samples: Integral = 128,
         filter_width: Real = 1.5,
         seed: Integral = 0,
@@ -365,9 +444,22 @@ class BlenderExperiment(object):
         camera : str
             The name of the camera.
 
+        color : bool, optional (default: ``False``)
+            If True, return the RGB image :math:`(H, W, 3)` (color camera, ``channel_weights``
+            ignored); else the intensity :math:`(H, W)` of a monochrome sensor.
+
+        channel_weights : ArrayLike, optional (default: ``(1/3, 1/3, 1/3)``)
+            The sensitivity :math:`(w_R, w_G, w_B)` of the monochrome sensor to the RGB channels
+            (non-negative, not all zero, not normalized): the intensity is
+            :math:`I = w_R R + w_G G + w_B B`, by default the mean of the channels. E.g.
+            ``(0.2126, 0.7152, 0.0722)`` for the Rec.709 luminance. Ignored with ``color=True``.
+
         n_samples : Integral, optional (default: ``128``)
-            The number of samples per pixel (the noise of Cycles decreases as
-            :math:`1 / \sqrt{n}`). No denoising is applied.
+            The number of samples of every pixel (the noise of Cycles decreases as
+            :math:`1 / \sqrt{n}`). The render is unbiased: no denoising, no adaptive sampling
+            (every pixel gets exactly ``n_samples``), no clamping of the samples and no
+            filtering of the glossy reflections (``blur_glossy = 0``), contrary to the defaults
+            of Blender.
 
         filter_width : Real, optional (default: ``1.5``)
             The width in pixels of the pixel filter of Cycles (Blackman-Harris): the blur of the
@@ -386,11 +478,19 @@ class BlenderExperiment(object):
         Returns
         -------
         numpy.ndarray
-            The linear intensity :math:`(H, W)` (float64), mean of the RGB channels, with the
-            rows of the image from top to bottom (pysdic convention).
+            The linear intensity :math:`(H, W)` (float64) weighted by ``channel_weights``, or the
+            linear RGB image :math:`(H, W, 3)` (float64) with ``color=True``, with the rows of the
+            image from top to bottom (pysdic convention). The values are those of the float32
+            buffer of Cycles (no quantization, no clipping).
 
         """
         blender_camera = self.get_camera(camera)
+        color = _validate_bool(color, "color")
+        channel_weights = _as_array(channel_weights, "channel_weights", numpy.float64, shape=(3,), finite=True)
+        if numpy.any(channel_weights < 0.0) or not numpy.any(channel_weights > 0.0):
+            raise ValueError(
+                f"Input 'channel_weights' must be non-negative and not all zero. Got {channel_weights.tolist()}."
+            )
         n_samples = _validate_integer(n_samples, "n_samples", min_value=1)
         filter_width = _validate_real(filter_width, "filter_width", positive=True, finite=True)
         seed = _validate_integer(seed, "seed", min_value=0)
@@ -406,6 +506,10 @@ class BlenderExperiment(object):
         render.pixel_aspect_x, render.pixel_aspect_y = blender_camera.pixel_aspect
         scene.cycles.samples = n_samples
         scene.cycles.use_denoising = False
+        scene.cycles.use_adaptive_sampling = False  # Exactly n_samples per pixel
+        scene.cycles.sample_clamp_direct = 0.0  # No clamping (biased energy)
+        scene.cycles.sample_clamp_indirect = 0.0
+        scene.cycles.blur_glossy = 0.0  # No filter of the glossy reflections (biased highlights)
         scene.cycles.filter_width = filter_width
         scene.cycles.seed = seed
         scene.cycles.device = device
@@ -415,9 +519,11 @@ class BlenderExperiment(object):
         scene.view_settings.look = "None"
         scene.view_settings.exposure = 0.0
         scene.view_settings.gamma = 1.0
+        # Lossless 32-bit float file: exact copy of the float32 buffer of Cycles
         render.image_settings.file_format = "OPEN_EXR"
         render.image_settings.color_mode = "RGB"
         render.image_settings.color_depth = "32"
+        render.image_settings.exr_codec = "ZIP"
 
         width, height = blender_camera.width, blender_camera.height
         with tempfile.TemporaryDirectory(prefix="pysdic_blender_") as folder:
@@ -432,15 +538,18 @@ class BlenderExperiment(object):
                 channels = image.channels
             finally:
                 bpy.data.images.remove(image)
-        pixels = pixels.reshape(height, width, channels)[::-1]  # Blender: first row at the bottom
-        return pixels[..., :3].mean(axis=2).astype(numpy.float64)
+        # Blender: first row at the bottom
+        rgb = numpy.ascontiguousarray(pixels.reshape(height, width, channels)[::-1, :, :3], dtype=numpy.float64)
+        if color:
+            return rgb
+        return rgb @ channel_weights
 
 
 # =============================================================================
 # One image
 # =============================================================================
 def render_blender_image(
-    camera: Camera,
+    camera: Union[Camera, BlenderCamera],
     mesh: Mesh,
     *,
     displacement: Optional[ArrayLike] = None,
@@ -448,6 +557,7 @@ def render_blender_image(
     texture_range: Tuple[float, float] = (0.0, 255.0),
     material: Optional[BlenderMaterialBSDF] = None,
     spotlights: Sequence[BlenderSpotLight] = (),
+    arealights: Sequence[BlenderAreaLight] = (),
     background_color: ArrayLike = (1.0, 1.0, 1.0),
     background_strength: Real = 1.0,
     **render_options: Any,
@@ -455,7 +565,7 @@ def render_blender_image(
     r"""
     Render one image of a mesh seen by a camera with Blender: the counterpart of
     :func:`pysdic.generate_synthetic_image` with the lighting and the materials of Cycles
-    (shading, shadows, specular reflections).
+    (shading, shadows, specular reflections, depth of field).
 
     Creates a :class:`BlenderExperiment` (which clears the data of Blender) with the camera (see
     :class:`BlenderCamera`), the mesh (see :class:`BlenderMesh`) and the lights, and renders it.
@@ -469,8 +579,9 @@ def render_blender_image(
 
     Parameters
     ----------
-    camera : :class:`pysdic.Camera`
-        The camera.
+    camera : Union[:class:`pysdic.Camera`, :class:`BlenderCamera`]
+        The camera: a :class:`pysdic.Camera` (converted with the default options of
+        :class:`BlenderCamera`, pinhole) or a :class:`BlenderCamera` (e.g. with a depth of field).
 
     mesh : :class:`pysdic.Mesh`
         The 3D ``triangle_3`` mesh, with a UV map for a texture.
@@ -484,24 +595,31 @@ def render_blender_image(
     spotlights : Sequence[:class:`BlenderSpotLight`], optional
         The spot lights.
 
+    arealights : Sequence[:class:`BlenderAreaLight`], optional
+        The area lights.
+
     background_color, background_strength :
         The ambient light (see :meth:`BlenderExperiment.set_background`), by default a white
         ambient light of strength 1 (a uniform lighting without spot light).
 
     **render_options :
-        The options of :meth:`BlenderExperiment.render` (``n_samples``, ``filter_width``, ...).
+        The options of :meth:`BlenderExperiment.render` (``color``, ``channel_weights``,
+        ``n_samples``, ``filter_width``, ...).
 
     Returns
     -------
     numpy.ndarray
-        The linear intensity :math:`(H, W)` (float64).
+        The linear intensity :math:`(H, W)`, or the RGB image :math:`(H, W, 3)` with
+        ``color=True`` (float64).
 
     """
     experiment = BlenderExperiment(background_color=background_color, background_strength=background_strength)
-    experiment.add_camera("camera", BlenderCamera(camera))
+    experiment.add_camera("camera", camera if isinstance(camera, BlenderCamera) else BlenderCamera(camera))
     experiment.add_mesh(
         "mesh", BlenderMesh(mesh, displacement=displacement, texture=texture, texture_range=texture_range), material=material
     )
     for index, spotlight in enumerate(spotlights):
         experiment.add_spotlight(f"spotlight_{index}", spotlight)
+    for index, arealight in enumerate(arealights):
+        experiment.add_arealight(f"arealight_{index}", arealight)
     return experiment.render("camera", **render_options)

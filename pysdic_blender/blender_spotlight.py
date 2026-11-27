@@ -29,6 +29,32 @@ from ._validation import _as_array, _validate_real
 from .blender_camera import _rotation_to_quaternion
 
 
+# =============================================================================
+# Internal helpers
+# =============================================================================
+def _light_axes(direction: numpy.ndarray, up: Optional[numpy.ndarray] = None) -> numpy.ndarray:
+    # Rotation (3, 3) of a Blender light object, columns = local axes in the world: the light
+    # emits along its local -z (z = -direction), its local y is `up` made orthogonal to the
+    # direction (by default an arbitrary deterministic axis)
+    z_axis = -direction
+    if up is None:
+        helper = numpy.array([1.0, 0.0, 0.0]) if abs(z_axis[0]) < 0.9 else numpy.array([0.0, 1.0, 0.0])
+        x_axis = numpy.cross(helper, z_axis)
+        x_axis /= numpy.linalg.norm(x_axis)
+        y_axis = numpy.cross(z_axis, x_axis)
+    else:
+        y_axis = up - numpy.dot(up, z_axis) * z_axis
+        norm = numpy.linalg.norm(y_axis)
+        if norm < 1e-9 * numpy.linalg.norm(up):
+            raise ValueError("Input 'up' must not be parallel to the direction of the light.")
+        y_axis = y_axis / norm
+        x_axis = numpy.cross(y_axis, z_axis)
+    return numpy.stack((x_axis, y_axis, z_axis), axis=1)
+
+
+# =============================================================================
+# Spot light
+# =============================================================================
 class BlenderSpotLight(object):
     r"""
     A spot light of Blender: a cone of light emitted from a position along a direction.
@@ -36,7 +62,18 @@ class BlenderSpotLight(object):
     - ``energy``: the power in watts the light would emit without the cone (Blender convention);
     - ``spot_size``: the full opening angle of the cone, in radians in :math:`[0, \pi]`;
     - ``spot_blend``: the fraction of the cone with a smooth edge, in :math:`[0, 1]` (0: sharp
-      edge).
+      edge);
+    - ``color``: the linear RGB color of the light (multiplies the emitted power on each
+      channel, white by default);
+    - ``radius``: the radius of the emitting sphere (``shadow_soft_size`` of Blender), 0 for a
+      point source.
+
+    **Radius.** Cycles renders the light as a sphere of radius ``radius`` emitting the same
+    total power. A point source (``radius = 0``, default) gives sharp shadows and tiny,
+    very intense specular highlights on a glossy surface; a real projector (a few centimeters)
+    gives soft shadows (penumbra of width about ``2 radius`` times the ratio of the distances
+    occluder-surface / light-occluder) and larger, less saturated highlights. The sphere is
+    physically correct (the "soft falloff" of Blender is disabled).
 
     A Blender light emits along its local :math:`-z` axis: its rotation maps :math:`-z` to
     ``direction`` (the rotation around the direction does not matter for a spot light). The
@@ -59,6 +96,15 @@ class BlenderSpotLight(object):
     spot_blend : Real, optional (default: ``0.15``)
         The fraction of the cone with a smooth edge.
 
+    color : ArrayLike, optional (default: ``(1.0, 1.0, 1.0)``)
+        The RGB color :math:`(3,)` of the light, non-negative linear values (scene-linear
+        Rec.709, as all the colors of Blender). The power of the channel :math:`c` is
+        ``energy * color[c]``.
+
+    radius : Real, optional (default: ``0.0``)
+        The radius of the emitting sphere, in the unit of the scene (non-negative, 0 for a point
+        source). Not the default 0.25 of Blender, whose meaning depends on the unit of the scene.
+
     Examples
     --------
     .. code-block:: python
@@ -69,7 +115,7 @@ class BlenderSpotLight(object):
 
     """
 
-    __slots__ = ("_position", "_direction", "_energy", "_spot_size", "_spot_blend")
+    __slots__ = ("_position", "_direction", "_energy", "_spot_size", "_spot_blend", "_color", "_radius")
 
     def __init__(
         self,
@@ -79,6 +125,8 @@ class BlenderSpotLight(object):
         energy: Real = 1000.0,
         spot_size: Real = numpy.pi / 4,
         spot_blend: Real = 0.15,
+        color: ArrayLike = (1.0, 1.0, 1.0),
+        radius: Real = 0.0,
     ) -> None:
         self._position = _as_array(position, "position", numpy.float64, shape=(3,), finite=True).copy()
         direction = _as_array(direction, "direction", numpy.float64, shape=(3,), finite=True)
@@ -93,8 +141,13 @@ class BlenderSpotLight(object):
         self._spot_blend = _validate_real(spot_blend, "spot_blend", non_negative=True, finite=True)
         if self._spot_blend > 1.0:
             raise ValueError(f"Input 'spot_blend' must be in [0, 1]. Got {spot_blend}.")
+        self._color = _as_array(color, "color", numpy.float64, shape=(3,), finite=True).copy()
+        if numpy.any(self._color < 0.0):
+            raise ValueError(f"Input 'color' must be non-negative. Got {self._color.tolist()}.")
+        self._radius = _validate_real(radius, "radius", non_negative=True, finite=True)
         self._position.setflags(write=False)
         self._direction.setflags(write=False)
+        self._color.setflags(write=False)
 
     @classmethod
     def looking_at(cls, position: ArrayLike, target: ArrayLike, **kwargs: Any) -> BlenderSpotLight:
@@ -106,7 +159,8 @@ class BlenderSpotLight(object):
     def __repr__(self) -> str:
         return (
             f"BlenderSpotLight(position={self._position.tolist()}, direction={numpy.round(self._direction, 4).tolist()}, "
-            f"energy={self._energy}, spot_size={self._spot_size:.4f}, spot_blend={self._spot_blend})"
+            f"energy={self._energy}, spot_size={self._spot_size:.4f}, spot_blend={self._spot_blend}, "
+            f"color={self._color.tolist()}, radius={self._radius})"
         )
 
     @property
@@ -135,17 +189,25 @@ class BlenderSpotLight(object):
         return self._spot_blend
 
     @property
+    def color(self) -> numpy.ndarray:
+        r"""The linear RGB color :math:`(3,)` of the light (read-only)."""
+        return self._color
+
+    @property
+    def radius(self) -> float:
+        r"""The radius of the emitting sphere (``shadow_soft_size`` of Blender), 0 for a point source."""
+        return self._radius
+
+    @property
     def quaternion(self) -> numpy.ndarray:
         r"""The rotation ``(w, x, y, z)`` of the Blender light object (local :math:`-z` along ``direction``)."""
-        z_axis = -self._direction
-        helper = numpy.array([1.0, 0.0, 0.0]) if abs(z_axis[0]) < 0.9 else numpy.array([0.0, 1.0, 0.0])
-        x_axis = numpy.cross(helper, z_axis)
-        x_axis /= numpy.linalg.norm(x_axis)
-        y_axis = numpy.cross(z_axis, x_axis)
-        return _rotation_to_quaternion(numpy.stack((x_axis, y_axis, z_axis), axis=1))
+        return _rotation_to_quaternion(_light_axes(self._direction))
 
     def to_dict(self, description: Optional[str] = None) -> Dict[str, Any]:
-        r"""Export the light to a dictionary (``position``, ``direction``, ``energy``, ``spot_size``, ``spot_blend``)."""
+        r"""
+        Export the light to a dictionary (``position``, ``direction``, ``energy``, ``spot_size``,
+        ``spot_blend``, ``color``, ``radius``).
+        """
         data: Dict[str, Any] = {
             "type": "BlenderSpotLight",
             "position": self._position.tolist(),
@@ -153,6 +215,8 @@ class BlenderSpotLight(object):
             "energy": self._energy,
             "spot_size": self._spot_size,
             "spot_blend": self._spot_blend,
+            "color": self._color.tolist(),
+            "radius": self._radius,
         }
         if description is not None:
             if not isinstance(description, str):
@@ -162,13 +226,17 @@ class BlenderSpotLight(object):
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> BlenderSpotLight:
-        r"""Create a light from a dictionary of :meth:`to_dict`."""
+        r"""
+        Create a light from a dictionary of :meth:`to_dict` (the default values of the
+        constructor for the missing optional fields, e.g. a white light without ``color``).
+        """
         if not isinstance(data, dict):
             raise TypeError(f"Input 'data' must be a dictionary. Got type {type(data)}.")
         return cls(
             data["position"], data["direction"],
             energy=data.get("energy", 1000.0), spot_size=data.get("spot_size", numpy.pi / 4),
-            spot_blend=data.get("spot_blend", 0.15),
+            spot_blend=data.get("spot_blend", 0.15), color=data.get("color", (1.0, 1.0, 1.0)),
+            radius=data.get("radius", 0.0),
         )
 
     def to_json(self, path: str, description: Optional[str] = None) -> None:
