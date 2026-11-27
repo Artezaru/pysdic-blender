@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>&lt;no title&gt; &#8212; pysdic-blender 1.2.0 documentation</title>
+    <title>&lt;no title&gt; &#8212; pysdic-blender 1.3.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">pysdic-blender 1.2.0 documentation</p>
+    <p class="title logo__title">pysdic-blender 1.3.0 documentation</p>
   
 </a></div>
     
@@ -342,9 +342,24 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="pysdic.generate_synthetic_image gives the exact gray levels of the texture, without lighting. pysdic_blender renders the same scene with Blender (Cycles): a spot light, shading and the reflections of a material. This example renders a speckled plate with a matte paint and with polished steel."><img alt="" src="../_images/sphx_glr_blender_rendering_thumb.png" />
-<p><a class="reference internal" href="blender_rendering.html"><span class="doc">Rendering synthetic images with Blender</span></a></p>
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="A rotation vector and a translation (``rvec``, tvec) describe the world-to-camera transformation: exact, but hard to write by hand. It is often simpler to give the frame of the camera in the world: its optical center and its axes (OpenCV: x to the right of the image, y downwards, z along the optical axis). This example builds the extrinsics of a stereo rig with py3dframe.Frame and pysdic.PerspectiveExtrinsic.from_frame, then renders it with Blender."><img alt="" src="../_images/sphx_glr_example_blender_cameras_from_frames_thumb.png" />
+<p><a class="reference internal" href="example_blender_cameras_from_frames.html"><span class="doc">Placing the cameras with frames</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Placing the cameras with frames</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In stereo DIC, the cameras are inclined on the specimen: the depth varies over the field and only one line of the specimen is exactly in focus. This example renders a speckled plate seen at 45° with a pinhole camera and with a lens at f/8 and f/2, and compares the blur to its prediction pysdic_blender.BlenderCamera.defocus_blur."><img alt="" src="../_images/sphx_glr_example_blender_depth_of_field_thumb.png" />
+<p><a class="reference internal" href="example_blender_depth_of_field.html"><span class="doc">Depth of field of an inclined camera</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Depth of field of an inclined camera</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="The lighting changes the gray levels of a speckled surface: shading, shadows, highlights. This example renders a plate with a dome under several lights of pysdic_blender: a point-like spot, a spot of finite size, an LED panel (area light), and two colored spots."><img alt="" src="../_images/sphx_glr_example_blender_lights_thumb.png" />
+<p><a class="reference internal" href="example_blender_lights.html"><span class="doc">Lighting a specimen with Blender</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Lighting a specimen with Blender</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="pysdic_blender.BlenderCamera converts an OpenCV camera of pysdic into a Blender camera (pose, focal lengths, principal point, pixel aspect ratio, sensor fit). This example checks that Blender projects exactly as pysdic: a plate textured with small Gaussian spots is rendered, and the centroid of each spot in the render is compared to the centroid predicted by pysdic."><img alt="" src="../_images/sphx_glr_example_blender_projection_check_thumb.png" />
+<p><a class="reference internal" href="example_blender_projection_check.html"><span class="doc">Checking the Blender cameras against pysdic</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Checking the Blender cameras against pysdic</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="pysdic.generate_synthetic_image gives the exact gray levels of the texture, without lighting. pysdic_blender renders the same scene with Blender (Cycles): a spot light, shading and the reflections of a material. This example renders a speckled plate with a matte paint and with polished steel."><img alt="" src="../_images/sphx_glr_example_blender_rendering_thumb.png" />
+<p><a class="reference internal" href="example_blender_rendering.html"><span class="doc">Rendering synthetic images with Blender</span></a></p>
   <div class="sphx-glr-thumbnail-title">Rendering synthetic images with Blender</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="A stereo DIC test needs the images of both cameras at each frame of the deformation. This example builds the scene once (two cameras, two lights, a speckled plate), then updates the vertices of the plate with the displacement of each frame and renders both cameras. The setup is saved to JSON files to regenerate the images later."><img alt="" src="../_images/sphx_glr_example_blender_stereo_sequence_thumb.png" />
+<p><a class="reference internal" href="example_blender_stereo_sequence.html"><span class="doc">Stereo images of a deforming specimen</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Stereo images of a deforming specimen</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
 <div class="sphx-glr-footer sphx-glr-footer-gallery docutils container">

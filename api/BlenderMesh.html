@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pysdic_blender.BlenderMesh &#8212; pysdic-blender 1.2.0 documentation</title>
+    <title>pysdic_blender.BlenderMesh &#8212; pysdic-blender 1.3.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -128,7 +128,7 @@
   
   
   
-    <p class="title logo__title">pysdic-blender 1.2.0 documentation</p>
+    <p class="title logo__title">pysdic-blender 1.3.0 documentation</p>
   
 </a></div>
     
@@ -323,6 +323,7 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="BlenderSpotLight.html">pysdic_blender.BlenderSpotLight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlenderAreaLight.html">pysdic_blender.BlenderAreaLight</a></li>
 </ul>
 </div>
 </nav></div>
@@ -410,6 +411,10 @@ g_{max})\)</span>, clipped to <span class="math notranslate nohighlight">\([0, 1
 </ul>
 <p>The texture is multiplied by the base color of the material of the mesh (see
 <a class="reference internal" href="BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF" title="pysdic_blender.BlenderMaterialBSDF"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderMaterialBSDF</span></code></a>). The object is immutable (read-only copies).</p>
+<p><strong>Export.</strong> <a class="reference internal" href="#pysdic_blender.BlenderMesh.to_dict" title="pysdic_blender.BlenderMesh.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a> / <a class="reference internal" href="#pysdic_blender.BlenderMesh.to_json" title="pysdic_blender.BlenderMesh.to_json"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_json()</span></code></a> save the extracted data above (not the
+<a class="reference external" href="https://artezaru.github.io/pysdic/api/geometry/Mesh.html#pysdic.Mesh" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Mesh</span></code></a>); <a class="reference internal" href="#pysdic_blender.BlenderMesh.from_dict" title="pysdic_blender.BlenderMesh.from_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_dict()</span></code></a> / <a class="reference internal" href="#pysdic_blender.BlenderMesh.from_json" title="pysdic_blender.BlenderMesh.from_json"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_json()</span></code></a> rebuild the Blender mesh from
+them. With a texture, the file contains all the <span class="math notranslate nohighlight">\(H_t \times W_t\)</span> reflectances (a large
+JSON file for a large texture).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -436,24 +441,81 @@ triangle is shaded with its own normal (exact geometry of the mesh).</p></li>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic_blender</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlenderMesh</span>
 
 <span class="n">blender_mesh</span> <span class="o">=</span> <span class="n">BlenderMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">displacement</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">get_displacement</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">texture</span><span class="o">=</span><span class="n">speckle</span><span class="p">)</span>
+<span class="n">blender_mesh</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="s2">"mesh_frame_1.json"</span><span class="p">)</span>
+<span class="n">same_mesh</span> <span class="o">=</span> <span class="n">BlenderMesh</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="s2">"mesh_frame_1.json"</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderMesh.albedo">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">albedo</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderMesh.albedo" title="Link to this definition">#</a></dt>
-<dd><p>The reflectance of the texture <span class="math notranslate nohighlight">\((H_t, W_t)\)</span> in <span class="math notranslate nohighlight">\([0, 1]\)</span>, or None (read-only).</p>
+<dd><p>The reflectance <span class="math notranslate nohighlight">\((H_t, W_t)\)</span> of the texture in <span class="math notranslate nohighlight">\([0, 1]\)</span> (float64,
+read-only), or None without texture.</p>
+<p><span class="math notranslate nohighlight">\(\rho = \text{clip}((g - g_{min}) / (g_{max} - g_{min}), 0, 1)\)</span> with
+<code class="docutils literal notranslate"><span class="pre">texture_range</span></code>. The first row is <span class="math notranslate nohighlight">\(v = 1\)</span> (pysdic convention): the rows are
+flipped when the texture is given to Blender (first row at <span class="math notranslate nohighlight">\(v = 0\)</span>). It is
+<strong>not</strong> multiplied by the base color of the material, which is applied in
+<a class="reference internal" href="BlenderExperiment.html#pysdic_blender.BlenderExperiment.add_mesh" title="pysdic_blender.BlenderExperiment.add_mesh"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BlenderExperiment.add_mesh()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderMesh.coordinates">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">coordinates</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderMesh.coordinates" title="Link to this definition">#</a></dt>
-<dd><p>The (displaced) vertices <span class="math notranslate nohighlight">\((N_v, 3)\)</span> (read-only).</p>
+<dd><p>the vertices of the
+<a class="reference external" href="https://artezaru.github.io/pysdic/api/geometry/Mesh.html#pysdic.Mesh" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Mesh</span></code></a> plus <code class="docutils literal notranslate"><span class="pre">displacement</span></code>, in the unit of the scene (the unit of the
+cameras and the lights).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The vertices <span class="math notranslate nohighlight">\((N_v, 3)\)</span> given to Blender (float64, read-only)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderMesh.faces">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">faces</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderMesh.faces" title="Link to this definition">#</a></dt>
-<dd><p>The triangles <span class="math notranslate nohighlight">\((N_e, 3)\)</span> (read-only).</p>
+<dd><p>the indices (from 0) in
+<a class="reference internal" href="#pysdic_blender.BlenderMesh.coordinates" title="pysdic_blender.BlenderMesh.coordinates"><code class="xref py py-attr docutils literal notranslate"><span class="pre">coordinates</span></code></a> of the vertices of each triangle, in the order of
+<a class="reference external" href="https://artezaru.github.io/pysdic/api/geometry/_generated/pysdic.Mesh.elements.html#pysdic.Mesh.elements" title="(in pysdic)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pysdic.Mesh.elements</span></code></a>.</p>
+<p>Each triangle is a polygon of Blender whose loops follow this order: the normal of the
+triangle is given by the right-hand rule, <span class="math notranslate nohighlight">\((\vec{X}_1 - \vec{X}_0) \times
+(\vec{X}_2 - \vec{X}_0)\)</span>. Blender renders both sides of the faces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The triangles <span class="math notranslate nohighlight">\((N_e, 3)\)</span> (int64, read-only)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderMesh.from_dict">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_mesh.html#BlenderMesh.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderMesh.from_dict" title="Link to this definition">#</a></dt>
+<dd><p>Create a mesh from a dictionary of <a class="reference internal" href="#pysdic_blender.BlenderMesh.to_dict" title="pysdic_blender.BlenderMesh.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">coordinates</span></code> and <code class="docutils literal notranslate"><span class="pre">faces</span></code> are required; <code class="docutils literal notranslate"><span class="pre">uv</span></code> and <code class="docutils literal notranslate"><span class="pre">albedo</span></code> are None if absent,
+<code class="docutils literal notranslate"><span class="pre">interpolation</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;Linear&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">smooth</span></code> is False if absent. <code class="docutils literal notranslate"><span class="pre">albedo</span></code> is the
+reflectance in <span class="math notranslate nohighlight">\([0, 1]\)</span> (no <code class="docutils literal notranslate"><span class="pre">texture_range</span></code>). <code class="docutils literal notranslate"><span class="pre">type</span></code> and <code class="docutils literal notranslate"><span class="pre">description</span></code> are
+ignored, an unknown key raises a <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.15)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><em>Any</em></a><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pysdic_blender.BlenderMesh" title="pysdic_blender.blender_mesh.BlenderMesh"><em>BlenderMesh</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderMesh.from_json">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_mesh.html#BlenderMesh.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderMesh.from_json" title="Link to this definition">#</a></dt>
+<dd><p>Create a mesh from a JSON file (see <a class="reference internal" href="#pysdic_blender.BlenderMesh.from_dict" title="pysdic_blender.BlenderMesh.from_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_dict()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pysdic_blender.BlenderMesh" title="pysdic_blender.blender_mesh.BlenderMesh"><em>BlenderMesh</em></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -475,7 +537,9 @@ differ), i.e. if it can replace this one in a scene (see
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderMesh.interpolation">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">interpolation</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderMesh.interpolation" title="Link to this definition">#</a></dt>
-<dd><p>The interpolation of the texture by Blender.</p>
+<dd><p>The interpolation of the texture by Blender (<code class="docutils literal notranslate"><span class="pre">interpolation</span></code> of the Image Texture
+node): <code class="docutils literal notranslate"><span class="pre">&quot;Closest&quot;</span></code> (nearest texel), <code class="docutils literal notranslate"><span class="pre">&quot;Linear&quot;</span></code> (bilinear) or <code class="docutils literal notranslate"><span class="pre">&quot;Cubic&quot;</span></code> (bicubic).
+Outside <span class="math notranslate nohighlight">\([0, 1]^2\)</span>, the texture is extended with its border texels.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -493,13 +557,54 @@ differ), i.e. if it can replace this one in a scene (see
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderMesh.smooth">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">smooth</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderMesh.smooth" title="Link to this definition">#</a></dt>
-<dd><p>Whether the shading interpolates the normals of the vertices.</p>
+<dd><p>Whether the shading interpolates the normals of the vertices (<code class="docutils literal notranslate"><span class="pre">use_smooth</span></code> of the
+polygons of Blender). Only the normal used for the shading changes, not the geometry: the
+silhouette and the shadows stay those of the flat triangles.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderMesh.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_mesh.html#BlenderMesh.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderMesh.to_dict" title="Link to this definition">#</a></dt>
+<dd><p>Export the mesh to a dictionary: <code class="docutils literal notranslate"><span class="pre">{&quot;type&quot;:</span> <span class="pre">&quot;BlenderMesh&quot;,</span> <span class="pre">&quot;description&quot;:</span> <span class="pre">...,</span>
+<span class="pre">&quot;coordinates&quot;,</span> <span class="pre">&quot;faces&quot;,</span> <span class="pre">&quot;uv&quot;,</span> <span class="pre">&quot;albedo&quot;,</span> <span class="pre">&quot;interpolation&quot;,</span> <span class="pre">&quot;smooth&quot;}</span></code> (nested lists;
+<code class="docutils literal notranslate"><span class="pre">uv</span></code> and <code class="docutils literal notranslate"><span class="pre">albedo</span></code> only if not None).</p>
+<p>The data are those given to Blender (displaced vertices, reflectances of the texture),
+not the <a class="reference external" href="https://artezaru.github.io/pysdic/api/geometry/Mesh.html#pysdic.Mesh" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Mesh</span></code></a> nor the gray levels of the texture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em> | </em><em>None</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.15)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><em>Any</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderMesh.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_mesh.html#BlenderMesh.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderMesh.to_json" title="Link to this definition">#</a></dt>
+<dd><p>Export the mesh to a JSON file (see <a class="reference internal" href="#pysdic_blender.BlenderMesh.to_dict" title="pysdic_blender.BlenderMesh.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderMesh.uv">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">uv</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderMesh.uv" title="Link to this definition">#</a></dt>
-<dd><p>The UV coordinates <span class="math notranslate nohighlight">\((N_e, 3, 2)\)</span> of the vertices of each triangle, or None (read-only).</p>
+<dd><p>The UV coordinates <span class="math notranslate nohighlight">\((N_e, 3, 2)\)</span> (float64, read-only), or None without UV map.</p>
+<p><code class="docutils literal notranslate"><span class="pre">uv[i,</span> <span class="pre">j]</span></code> is the <span class="math notranslate nohighlight">\((u, v)\)</span> of the vertex <code class="docutils literal notranslate"><span class="pre">faces[i,</span> <span class="pre">j]</span></code> in the triangle
+<span class="math notranslate nohighlight">\(i\)</span> (a value per loop of Blender, so a vertex can have different UV coordinates in
+different triangles, e.g. along a seam). OpenGL convention: <span class="math notranslate nohighlight">\((u, v) \in [0, 1]^2\)</span>,
+<span class="math notranslate nohighlight">\(u\)</span> to the right and <span class="math notranslate nohighlight">\(v\)</span> upwards in the texture.</p>
 </dd></dl>
 
 </dd></dl>
@@ -557,11 +662,15 @@ differ), i.e. if it can replace this one in a scene (see
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.albedo"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.albedo</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.coordinates"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.coordinates</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.faces"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.faces</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.from_dict"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.from_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.from_json"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.from_json()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.has_same_topology"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.has_same_topology()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.interpolation"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.interpolation</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.n_faces"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.n_faces</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.n_vertices"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.n_vertices</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.smooth"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.smooth</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.to_dict"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.to_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.to_json"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.to_json()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderMesh.uv"><code class="docutils literal notranslate"><span class="pre">BlenderMesh.uv</span></code></a></li>
 </ul>
 </li>

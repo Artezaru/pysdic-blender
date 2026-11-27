@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; pysdic-blender 1.2.0 documentation</title>
+    <title>Index &#8212; pysdic-blender 1.3.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=6efca38a"></script>
+    <script src="_static/documentation_options.js?v=1f29e9d3"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic-blender 1.2.0 documentation</p>
+    <p class="title logo__title">pysdic-blender 1.3.0 documentation</p>
   
 </a></div>
     
@@ -341,15 +341,25 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.add_arealight">add_arealight() (BlenderExperiment method)</a>
+</li>
       <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.add_camera">add_camera() (BlenderExperiment method)</a>
 </li>
       <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.add_mesh">add_mesh() (BlenderExperiment method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.add_spotlight">add_spotlight() (BlenderExperiment method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/BlenderMesh.html#pysdic_blender.BlenderMesh.albedo">albedo (BlenderMesh property)</a>
+</li>
+      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.aperture_diameter">aperture_diameter (BlenderCamera property)</a>
+</li>
+      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.aperture_fstop">aperture_fstop (BlenderCamera property)</a>
+</li>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.area">area (BlenderAreaLight property)</a>
+</li>
+      <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.arealight_names">arealight_names (BlenderExperiment property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -357,12 +367,16 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera">BlenderCamera (class in pysdic_blender)</a>
+      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.blender_parameters">blender_parameters() (BlenderCamera method)</a>
 </li>
-      <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment">BlenderExperiment (class in pysdic_blender)</a>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight">BlenderAreaLight (class in pysdic_blender)</a>
+</li>
+      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera">BlenderCamera (class in pysdic_blender)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment">BlenderExperiment (class in pysdic_blender)</a>
+</li>
       <li><a href="api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF">BlenderMaterialBSDF (class in pysdic_blender)</a>
 </li>
       <li><a href="api/BlenderMesh.html#pysdic_blender.BlenderMesh">BlenderMesh (class in pysdic_blender)</a>
@@ -381,12 +395,18 @@
 </li>
       <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.center">center (BlenderCamera property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.clip_end">clip_end (BlenderCamera property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.clip_start">clip_start (BlenderCamera property)</a>
 </li>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.color">color (BlenderAreaLight property)</a>
+
+      <ul>
+        <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.color">(BlenderSpotLight property)</a>
+</li>
+      </ul></li>
       <li><a href="api/BlenderMesh.html#pysdic_blender.BlenderMesh.coordinates">coordinates (BlenderMesh property)</a>
 </li>
   </ul></td>
@@ -395,16 +415,28 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.direction">direction (BlenderSpotLight property)</a>
+      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.defocus_blur">defocus_blur() (BlenderCamera method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.direction">direction (BlenderAreaLight property)</a>
+
+      <ul>
+        <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.direction">(BlenderSpotLight property)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.energy">energy (BlenderSpotLight property)</a>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.energy">energy (BlenderAreaLight property)</a>
+
+      <ul>
+        <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.energy">(BlenderSpotLight property)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -413,17 +445,31 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/BlenderMesh.html#pysdic_blender.BlenderMesh.faces">faces (BlenderMesh property)</a>
 </li>
-      <li><a href="api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.from_dict">from_dict() (BlenderMaterialBSDF class method)</a>
+      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.focus_distance">focus_distance (BlenderCamera property)</a>
+</li>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.from_dict">from_dict() (BlenderAreaLight class method)</a>
 
       <ul>
+        <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.from_dict">(BlenderCamera class method)</a>
+</li>
+        <li><a href="api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.from_dict">(BlenderMaterialBSDF class method)</a>
+</li>
+        <li><a href="api/BlenderMesh.html#pysdic_blender.BlenderMesh.from_dict">(BlenderMesh class method)</a>
+</li>
         <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.from_dict">(BlenderSpotLight class method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.from_json">from_json() (BlenderMaterialBSDF class method)</a>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.from_json">from_json() (BlenderAreaLight class method)</a>
 
       <ul>
+        <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.from_json">(BlenderCamera class method)</a>
+</li>
+        <li><a href="api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.from_json">(BlenderMaterialBSDF class method)</a>
+</li>
+        <li><a href="api/BlenderMesh.html#pysdic_blender.BlenderMesh.from_json">(BlenderMesh class method)</a>
+</li>
         <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.from_json">(BlenderSpotLight class method)</a>
 </li>
       </ul></li>
@@ -433,6 +479,8 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.get_arealight">get_arealight() (BlenderExperiment method)</a>
+</li>
       <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.get_camera">get_camera() (BlenderExperiment method)</a>
 </li>
       <li><a href="api/get_copper_material.html#pysdic_blender.get_copper_material">get_copper_material() (in module pysdic_blender)</a>
@@ -485,12 +533,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.lens">lens (BlenderCamera property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.location">location (BlenderCamera property)</a>
 </li>
-      <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.looking_at">looking_at() (BlenderSpotLight class method)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.looking_at">looking_at() (BlenderAreaLight class method)</a>
+
+      <ul>
+        <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.looking_at">(BlenderSpotLight class method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -523,8 +575,12 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.position">position (BlenderSpotLight property)</a>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.position">position (BlenderAreaLight property)</a>
+
+      <ul>
+        <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.position">(BlenderSpotLight property)</a>
 </li>
+      </ul></li>
       <li><a href="api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.principled_inputs">principled_inputs() (BlenderMaterialBSDF method)</a>
 </li>
   </ul></td>
@@ -533,9 +589,11 @@
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.quaternion">quaternion (BlenderCamera property)</a>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.quaternion">quaternion (BlenderAreaLight property)</a>
 
       <ul>
+        <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.quaternion">(BlenderCamera property)</a>
+</li>
         <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.quaternion">(BlenderSpotLight property)</a>
 </li>
       </ul></li>
@@ -545,14 +603,18 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.radius">radius (BlenderSpotLight property)</a>
+</li>
+      <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.remove_arealight">remove_arealight() (BlenderExperiment method)</a>
+</li>
       <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.remove_camera">remove_camera() (BlenderExperiment method)</a>
 </li>
       <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.remove_mesh">remove_mesh() (BlenderExperiment method)</a>
 </li>
-      <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.remove_spotlight">remove_spotlight() (BlenderExperiment method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.remove_spotlight">remove_spotlight() (BlenderExperiment method)</a>
+</li>
       <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.render">render() (BlenderExperiment method)</a>
 </li>
       <li><a href="api/render_blender_image.html#pysdic_blender.render_blender_image">render_blender_image() (in module pysdic_blender)</a>
@@ -573,11 +635,17 @@
 </li>
       <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.set_background">set_background() (BlenderExperiment method)</a>
 </li>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.shape">shape (BlenderAreaLight property)</a>
+</li>
       <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.shift_x">shift_x (BlenderCamera property)</a>
+</li>
+      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.shift_y">shift_y (BlenderCamera property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.shift_y">shift_y (BlenderCamera property)</a>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.size">size (BlenderAreaLight property)</a>
+</li>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.size_y">size_y (BlenderAreaLight property)</a>
 </li>
       <li><a href="api/BlenderMesh.html#pysdic_blender.BlenderMesh.smooth">smooth (BlenderMesh property)</a>
 </li>
@@ -587,25 +655,37 @@
 </li>
       <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.spotlight_names">spotlight_names (BlenderExperiment property)</a>
 </li>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.spread">spread (BlenderAreaLight property)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.to_dict">to_dict() (BlenderCamera method)</a>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.to_dict">to_dict() (BlenderAreaLight method)</a>
 
       <ul>
+        <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.to_dict">(BlenderCamera method)</a>
+</li>
         <li><a href="api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.to_dict">(BlenderMaterialBSDF method)</a>
+</li>
+        <li><a href="api/BlenderMesh.html#pysdic_blender.BlenderMesh.to_dict">(BlenderMesh method)</a>
 </li>
         <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.to_dict">(BlenderSpotLight method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.to_json">to_json() (BlenderMaterialBSDF method)</a>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.to_json">to_json() (BlenderAreaLight method)</a>
 
       <ul>
+        <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.to_json">(BlenderCamera method)</a>
+</li>
+        <li><a href="api/BlenderMaterialBSDF.html#pysdic_blender.BlenderMaterialBSDF.to_json">(BlenderMaterialBSDF method)</a>
+</li>
+        <li><a href="api/BlenderMesh.html#pysdic_blender.BlenderMesh.to_json">(BlenderMesh method)</a>
+</li>
         <li><a href="api/BlenderSpotLight.html#pysdic_blender.BlenderSpotLight.to_json">(BlenderSpotLight method)</a>
 </li>
       </ul></li>
@@ -617,10 +697,14 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/BlenderAreaLight.html#pysdic_blender.BlenderAreaLight.up">up (BlenderAreaLight property)</a>
+</li>
       <li><a href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment.update_mesh">update_mesh() (BlenderExperiment method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/BlenderCamera.html#pysdic_blender.BlenderCamera.use_dof">use_dof (BlenderCamera property)</a>
+</li>
       <li><a href="api/BlenderMesh.html#pysdic_blender.BlenderMesh.uv">uv (BlenderMesh property)</a>
 </li>
   </ul></td>

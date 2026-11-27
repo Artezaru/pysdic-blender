@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic_blender.blender_mesh &#8212; pysdic-blender 1.2.0 documentation</title>
+    <title>pysdic_blender.blender_mesh &#8212; pysdic-blender 1.3.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../../_static/documentation_options.js?v=1f29e9d3"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic-blender 1.2.0 documentation</p>
+    <p class="title logo__title">pysdic-blender 1.3.0 documentation</p>
   
 </a></div>
     
@@ -361,7 +361,8 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
@@ -370,6 +371,38 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_array</span><span class="p">,</span> <span class="n">_validate_bool</span><span class="p">,</span> <span class="n">_validate_choice</span>
 
 
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internal helpers</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_float_array</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># Finite float64 array with a shape where None is any size</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">!=</span> <span class="n">s</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">)):</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="s2">"("</span> <span class="o">+</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"N"</span> <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="s2">")"</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' must have the shape </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">. Got shape </span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">array</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' must have finite values."</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">array</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_faces</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">n_vertices</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># Triangles (N_e, 3) of integer indices in [0, N_v)</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'faces' must have the shape (N_e, 3). Got shape </span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'faces' must contain integers. Got dtype </span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">n_vertices</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'faces' must contain indices in [0, </span><span class="si">{</span><span class="n">n_vertices</span><span class="si">}</span><span class="s2">). Got [</span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]."</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">array</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Mesh</span>
+<span class="c1"># =============================================================================</span>
 <div class="viewcode-block" id="BlenderMesh">
 <a class="viewcode-back" href="../../api/BlenderMesh.html#pysdic_blender.BlenderMesh">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BlenderMesh</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -397,6 +430,11 @@
 
 <span class="sd">    The texture is multiplied by the base color of the material of the mesh (see</span>
 <span class="sd">    :class:`BlenderMaterialBSDF`). The object is immutable (read-only copies).</span>
+
+<span class="sd">    **Export.** :meth:`to_dict` / :meth:`to_json` save the extracted data above (not the</span>
+<span class="sd">    :class:`pysdic.Mesh`); :meth:`from_dict` / :meth:`from_json` rebuild the Blender mesh from</span>
+<span class="sd">    them. With a texture, the file contains all the :math:`H_t \times W_t` reflectances (a large</span>
+<span class="sd">    JSON file for a large texture).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -437,6 +475,8 @@
 <span class="sd">        from pysdic_blender import BlenderMesh</span>
 
 <span class="sd">        blender_mesh = BlenderMesh(mesh, displacement=analysis.get_displacement(1), texture=speckle)</span>
+<span class="sd">        blender_mesh.to_json("mesh_frame_1.json")</span>
+<span class="sd">        same_mesh = BlenderMesh.from_json("mesh_frame_1.json")</span>
 
 <span class="sd">    """</span>
 
@@ -466,17 +506,14 @@
             <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The vertices of the mesh (with the displacement) must be finite."</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_coordinates</span> <span class="o">=</span> <span class="n">coordinates</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">elements</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">interpolation</span><span class="p">,</span> <span class="s2">"interpolation"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"Closest"</span><span class="p">,</span> <span class="s2">"Linear"</span><span class="p">,</span> <span class="s2">"Cubic"</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_smooth</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">smooth</span><span class="p">,</span> <span class="s2">"smooth"</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_uv</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">uv</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">mesh</span><span class="o">.</span><span class="n">uvmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_uv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">uvmap</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">uv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">uvmap</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">albedo</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">texture</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">uv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The mesh must have a UV map ('mesh.uvmap') to be rendered with a texture."</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">texture</span><span class="o">.</span><span class="n">image</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">texture</span><span class="p">,</span> <span class="n">Image</span><span class="p">)</span> <span class="k">else</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">texture</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -489,8 +526,37 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'texture_range' must satisfy min &lt; max. Got (</span><span class="si">{</span><span class="n">g_min</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">g_max</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'texture' must have finite values."</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">clip</span><span class="p">((</span><span class="n">data</span> <span class="o">-</span> <span class="n">g_min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">g_max</span> <span class="o">-</span> <span class="n">g_min</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">albedo</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">clip</span><span class="p">((</span><span class="n">data</span> <span class="o">-</span> <span class="n">g_min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">g_max</span> <span class="o">-</span> <span class="n">g_min</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">elements</span><span class="p">,</span> <span class="n">uv</span><span class="p">,</span> <span class="n">albedo</span><span class="p">,</span> <span class="n">interpolation</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">coordinates</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="n">faces</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="n">uv</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">albedo</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">smooth</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Validate and store the data (shared by __init__ and from_dict), as read-only copies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coordinates</span> <span class="o">=</span> <span class="n">_as_float_array</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="s2">"coordinates"</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span> <span class="o">=</span> <span class="n">_as_faces</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">n_faces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uv</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">uv</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_as_float_array</span><span class="p">(</span><span class="n">uv</span><span class="p">,</span> <span class="s2">"uv"</span><span class="p">,</span> <span class="p">(</span><span class="n">n_faces</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">albedo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"A mesh with a texture ('albedo') must have UV coordinates ('uv')."</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span> <span class="o">=</span> <span class="n">_as_float_array</span><span class="p">(</span><span class="n">albedo</span><span class="p">,</span> <span class="s2">"albedo"</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'albedo' must not be empty."</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"Input 'albedo' must be in [0, 1]. Got [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">]."</span>
+                <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">interpolation</span><span class="p">,</span> <span class="s2">"interpolation"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"Closest"</span><span class="p">,</span> <span class="s2">"Linear"</span><span class="p">,</span> <span class="s2">"Cubic"</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_smooth</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">smooth</span><span class="p">,</span> <span class="s2">"smooth"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">array</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_coordinates</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uv</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">array</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">array</span><span class="o">.</span><span class="n">setflags</span><span class="p">(</span><span class="n">write</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -499,34 +565,73 @@
         <span class="n">texture</span> <span class="o">=</span> <span class="s2">"no texture"</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"texture </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">"BlenderMesh(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vertices</span><span class="si">}</span><span class="s2"> vertices, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_faces</span><span class="si">}</span><span class="s2"> triangles, </span><span class="si">{</span><span class="n">texture</span><span class="si">}</span><span class="s2">)"</span>
 
+    <span class="c1"># ===================================================================</span>
+    <span class="c1"># Data</span>
+    <span class="c1"># ===================================================================</span>
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The (displaced) vertices :math:`(N_v, 3)` (read-only)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The vertices :math:`(N_v, 3)` given to Blender (float64, read-only): the vertices of the</span>
+<span class="sd">        :class:`pysdic.Mesh` plus ``displacement``, in the unit of the scene (the unit of the</span>
+<span class="sd">        cameras and the lights).</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinates</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">faces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The triangles :math:`(N_e, 3)` (read-only)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The triangles :math:`(N_e, 3)` (int64, read-only): the indices (from 0) in</span>
+<span class="sd">        :attr:`coordinates` of the vertices of each triangle, in the order of</span>
+<span class="sd">        :attr:`pysdic.Mesh.elements`.</span>
+
+<span class="sd">        Each triangle is a polygon of Blender whose loops follow this order: the normal of the</span>
+<span class="sd">        triangle is given by the right-hand rule, :math:`(\vec{X}_1 - \vec{X}_0) \times</span>
+<span class="sd">        (\vec{X}_2 - \vec{X}_0)`. Blender renders both sides of the faces.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">uv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The UV coordinates :math:`(N_e, 3, 2)` of the vertices of each triangle, or None (read-only)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The UV coordinates :math:`(N_e, 3, 2)` (float64, read-only), or None without UV map.</span>
+
+<span class="sd">        ``uv[i, j]`` is the :math:`(u, v)` of the vertex ``faces[i, j]`` in the triangle</span>
+<span class="sd">        :math:`i` (a value per loop of Blender, so a vertex can have different UV coordinates in</span>
+<span class="sd">        different triangles, e.g. along a seam). OpenGL convention: :math:`(u, v) \in [0, 1]^2`,</span>
+<span class="sd">        :math:`u` to the right and :math:`v` upwards in the texture.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uv</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">albedo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The reflectance of the texture :math:`(H_t, W_t)` in :math:`[0, 1]`, or None (read-only)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The reflectance :math:`(H_t, W_t)` of the texture in :math:`[0, 1]` (float64,</span>
+<span class="sd">        read-only), or None without texture.</span>
+
+<span class="sd">        :math:`\rho = \text{clip}((g - g_{min}) / (g_{max} - g_{min}), 0, 1)` with</span>
+<span class="sd">        ``texture_range``. The first row is :math:`v = 1` (pysdic convention): the rows are</span>
+<span class="sd">        flipped when the texture is given to Blender (first row at :math:`v = 0`). It is</span>
+<span class="sd">        **not** multiplied by the base color of the material, which is applied in</span>
+<span class="sd">        :meth:`BlenderExperiment.add_mesh`.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">interpolation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The interpolation of the texture by Blender."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The interpolation of the texture by Blender (``interpolation`` of the Image Texture</span>
+<span class="sd">        node): ``"Closest"`` (nearest texel), ``"Linear"`` (bilinear) or ``"Cubic"`` (bicubic).</span>
+<span class="sd">        Outside :math:`[0, 1]^2`, the texture is extended with its border texels.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">smooth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""Whether the shading interpolates the normals of the vertices."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Whether the shading interpolates the normals of the vertices (``use_smooth`` of the</span>
+<span class="sd">        polygons of Blender). Only the normal used for the shading changes, not the geometry: the</span>
+<span class="sd">        silhouette and the shadows stay those of the flat triangles.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_smooth</span>
 
     <span class="nd">@property</span>
@@ -553,6 +658,86 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_uv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_uv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_uv</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_uv</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_vertices</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">n_vertices</span> <span class="ow">and</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_faces</span><span class="p">)</span> <span class="ow">and</span> <span class="n">same_uv</span></div>
+
+
+    <span class="c1"># ===================================================================</span>
+    <span class="c1"># Export</span>
+    <span class="c1"># ===================================================================</span>
+<div class="viewcode-block" id="BlenderMesh.to_dict">
+<a class="viewcode-back" href="../../api/BlenderMesh.html#pysdic_blender.BlenderMesh.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Export the mesh to a dictionary: ``{"type": "BlenderMesh", "description": ...,</span>
+<span class="sd">        "coordinates", "faces", "uv", "albedo", "interpolation", "smooth"}`` (nested lists;</span>
+<span class="sd">        ``uv`` and ``albedo`` only if not None).</span>
+
+<span class="sd">        The data are those given to Blender (displaced vertices, reflectances of the texture),</span>
+<span class="sd">        not the :class:`pysdic.Mesh` nor the gray levels of the texture.</span>
+<span class="sd">        """</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"BlenderMesh"</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'description' must be a string. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"description"</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">"coordinates"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinates</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">"faces"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"uv"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uv</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"albedo"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_albedo</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">"interpolation"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">"smooth"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_smooth</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="BlenderMesh.from_dict">
+<a class="viewcode-back" href="../../api/BlenderMesh.html#pysdic_blender.BlenderMesh.from_dict">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">BlenderMesh</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create a mesh from a dictionary of :meth:`to_dict`.</span>
+
+<span class="sd">        ``coordinates`` and ``faces`` are required; ``uv`` and ``albedo`` are None if absent,</span>
+<span class="sd">        ``interpolation`` is ``"Linear"`` and ``smooth`` is False if absent. ``albedo`` is the</span>
+<span class="sd">        reflectance in :math:`[0, 1]` (no ``texture_range``). ``type`` and ``description`` are</span>
+<span class="sd">        ignored, an unknown key raises a ``KeyError``.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'data' must be a dictionary. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">allowed</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">,</span> <span class="s2">"coordinates"</span><span class="p">,</span> <span class="s2">"faces"</span><span class="p">,</span> <span class="s2">"uv"</span><span class="p">,</span> <span class="s2">"albedo"</span><span class="p">,</span> <span class="s2">"interpolation"</span><span class="p">,</span> <span class="s2">"smooth"</span><span class="p">}</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"coordinates"</span><span class="p">,</span> <span class="s2">"faces"</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing fields of a BlenderMesh: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">unknown</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="n">allowed</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unknown</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown fields of a BlenderMesh: </span><span class="si">{</span><span class="n">unknown</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">_setup</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"coordinates"</span><span class="p">],</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"faces"</span><span class="p">],</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"uv"</span><span class="p">),</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"albedo"</span><span class="p">),</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"interpolation"</span><span class="p">,</span> <span class="s2">"Linear"</span><span class="p">),</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"smooth"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">mesh</span></div>
+
+
+<div class="viewcode-block" id="BlenderMesh.to_json">
+<a class="viewcode-back" href="../../api/BlenderMesh.html#pysdic_blender.BlenderMesh.to_json">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Export the mesh to a JSON file (see :meth:`to_dict`)."""</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">description</span><span class="p">),</span> <span class="n">file</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BlenderMesh.from_json">
+<a class="viewcode-back" href="../../api/BlenderMesh.html#pysdic_blender.BlenderMesh.from_json">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BlenderMesh</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Create a mesh from a JSON file (see :meth:`from_dict`)."""</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">))</span></div>
 </div>
 
 </pre></div>

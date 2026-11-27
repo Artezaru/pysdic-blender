@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pysdic_blender.BlenderCamera &#8212; pysdic-blender 1.2.0 documentation</title>
+    <title>pysdic_blender.BlenderCamera &#8212; pysdic-blender 1.3.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -128,7 +128,7 @@
   
   
   
-    <p class="title logo__title">pysdic-blender 1.2.0 documentation</p>
+    <p class="title logo__title">pysdic-blender 1.3.0 documentation</p>
   
 </a></div>
     
@@ -323,6 +323,7 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="BlenderSpotLight.html">pysdic_blender.BlenderSpotLight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BlenderAreaLight.html">pysdic_blender.BlenderAreaLight</a></li>
 </ul>
 </div>
 </nav></div>
@@ -387,7 +388,7 @@
 <h1>pysdic_blender.BlenderCamera<a class="headerlink" href="#pysdic-blender-blendercamera" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">BlenderCamera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">BlenderCamera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aperture_diameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>The parameters of a Blender camera reproducing a <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a> of the OpenCV
 pinhole model, without distortion.</p>
@@ -432,6 +433,24 @@ convention 0, with the change of the axes of the camera from OpenCV (<span class
 (<a class="reference internal" href="#pysdic_blender.BlenderCamera.center" title="pysdic_blender.BlenderCamera.center"><code class="xref py py-attr docutils literal notranslate"><span class="pre">center</span></code></a>) and its <code class="docutils literal notranslate"><span class="pre">rotation_quaternion</span></code> is the quaternion of <span class="math notranslate nohighlight">\(R_b\)</span>
 (<a class="reference internal" href="#pysdic_blender.BlenderCamera.quaternion" title="pysdic_blender.BlenderCamera.quaternion"><code class="xref py py-attr docutils literal notranslate"><span class="pre">quaternion</span></code></a>): the inverse of the pose needs <strong>both</strong> the center
 <span class="math notranslate nohighlight">\(-R^T \vec{t}\)</span> and the transposed rotation <span class="math notranslate nohighlight">\(R^T\)</span>.</p>
+<p><strong>Depth of field.</strong> By default the camera is a pinhole (everything sharp). With an
+<code class="docutils literal notranslate"><span class="pre">aperture_diameter</span></code> <span class="math notranslate nohighlight">\(D\)</span> and a <code class="docutils literal notranslate"><span class="pre">focus_distance</span></code> <span class="math notranslate nohighlight">\(z_f\)</span>, Cycles renders a thin
+lens: the rays start on a disk of diameter <span class="math notranslate nohighlight">\(D\)</span> centered on <a class="reference internal" href="#pysdic_blender.BlenderCamera.center" title="pysdic_blender.BlenderCamera.center"><code class="xref py py-attr docutils literal notranslate"><span class="pre">center</span></code></a>, normal to
+the optical axis, and converge on the plane <span class="math notranslate nohighlight">\(z_c = z_f\)</span>. The points of this plane are
+sharp; a point at the depth <span class="math notranslate nohighlight">\(z_c\)</span> is spread on a disk of diameter (in pixels along
+<span class="math notranslate nohighlight">\(x\)</span>)</p>
+<div class="math notranslate nohighlight">
+\[c = f_x \, D \, \left| \frac{1}{z_c} - \frac{1}{z_f} \right|\]</div>
+<p>centered on its pinhole projection: the projection model above stays exact for the center
+of the blur (no change of magnification with the focus). For a real lens of focal length
+<span class="math notranslate nohighlight">\(f\)</span> and f-number <span class="math notranslate nohighlight">\(N\)</span>, <span class="math notranslate nohighlight">\(D = f / N\)</span> (e.g. 50 mm at f/8: <span class="math notranslate nohighlight">\(D = 6.25\)</span>
+mm), in the unit of the scene. Blender computes the aperture from <code class="docutils literal notranslate"><span class="pre">lens</span></code> and its
+<code class="docutils literal notranslate"><span class="pre">aperture_fstop</span></code> assuming a scene in meters: <a class="reference internal" href="#pysdic_blender.BlenderCamera.aperture_fstop" title="pysdic_blender.BlenderCamera.aperture_fstop"><code class="xref py py-attr docutils literal notranslate"><span class="pre">aperture_fstop</span></code></a> is computed so that the
+aperture is <span class="math notranslate nohighlight">\(D\)</span> whatever the unit of the scene and <a class="reference internal" href="#pysdic_blender.BlenderCamera.pixel_size" title="pysdic_blender.BlenderCamera.pixel_size"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pixel_size</span></code></a>.</p>
+<p><strong>Export.</strong> <a class="reference internal" href="#pysdic_blender.BlenderCamera.to_dict" title="pysdic_blender.BlenderCamera.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a> / <a class="reference internal" href="#pysdic_blender.BlenderCamera.to_json" title="pysdic_blender.BlenderCamera.to_json"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_json()</span></code></a> save the parameters of the camera
+(<span class="math notranslate nohighlight">\(R\)</span>, <span class="math notranslate nohighlight">\(\vec{t}\)</span>, <span class="math notranslate nohighlight">\(K\)</span>, the resolution, the pixel size, the clipping
+planes); <a class="reference internal" href="#pysdic_blender.BlenderCamera.from_dict" title="pysdic_blender.BlenderCamera.from_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_dict()</span></code></a> / <a class="reference internal" href="#pysdic_blender.BlenderCamera.from_json" title="pysdic_blender.BlenderCamera.from_json"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_json()</span></code></a> rebuild the Blender camera <strong>without</strong> the
+<a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a> (<a class="reference internal" href="#pysdic_blender.BlenderCamera.camera" title="pysdic_blender.BlenderCamera.camera"><code class="xref py py-attr docutils literal notranslate"><span class="pre">camera</span></code></a> is then None).</p>
 <p>The object is immutable: it reads the camera once at its creation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -442,13 +461,20 @@ ratio matters for the image). Blender requires <code class="docutils literal not
 short focal length.</p></li>
 <li><p><strong>clip_start</strong> (Real, optional (default: <code class="docutils literal notranslate"><span class="pre">1e-3</span></code> and <code class="docutils literal notranslate"><span class="pre">1e6</span></code>)) – The distances of the near and far clipping planes, in the unit of the scene.</p></li>
 <li><p><strong>clip_end</strong> (Real, optional (default: <code class="docutils literal notranslate"><span class="pre">1e-3</span></code> and <code class="docutils literal notranslate"><span class="pre">1e6</span></code>)) – The distances of the near and far clipping planes, in the unit of the scene.</p></li>
+<li><p><strong>aperture_diameter</strong> (<em>Optional</em><em>[</em><em>Real</em><em>]</em><em>, </em><em>optional</em>) – The diameter <span class="math notranslate nohighlight">\(D\)</span> of the aperture (entrance pupil) in the unit of the scene, for a
+depth of field. By default None: pinhole camera, no defocus blur. Requires
+<code class="docutils literal notranslate"><span class="pre">focus_distance</span></code>.</p></li>
+<li><p><strong>focus_distance</strong> (<em>Optional</em><em>[</em><em>Real</em><em>]</em><em>, </em><em>optional</em>) – The depth <span class="math notranslate nohighlight">\(z_f\)</span> of the plane in focus (distance along the optical axis, in the
+unit of the scene), e.g. <code class="docutils literal notranslate"><span class="pre">(R</span> <span class="pre">&#64;</span> <span class="pre">target</span> <span class="pre">+</span> <span class="pre">t)[2]</span></code> for a point <code class="docutils literal notranslate"><span class="pre">target</span></code> of the world.
+Requires <code class="docutils literal notranslate"><span class="pre">aperture_diameter</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#TypeError" title="(in Python v3.15)"><strong>TypeError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">camera</span></code> is not a <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a>, or its transformations are not of the
     types above.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – If a transformation does not follow its model on the test points, or <code class="docutils literal notranslate"><span class="pre">lens</span> <span class="pre">&lt;</span> <span class="pre">1</span></code> mm.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – If a transformation does not follow its model on the test points, <code class="docutils literal notranslate"><span class="pre">lens</span> <span class="pre">&lt;</span> <span class="pre">1</span></code> mm, or
+    only one of <code class="docutils literal notranslate"><span class="pre">aperture_diameter</span></code> and <code class="docutils literal notranslate"><span class="pre">focus_distance</span></code> is given.</p></li>
 </ul>
 </dd>
 </dl>
@@ -463,57 +489,167 @@ short focal length.</p></li>
 <span class="p">)</span>
 <span class="n">blender_camera</span> <span class="o">=</span> <span class="n">BlenderCamera</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">blender_camera</span><span class="o">.</span><span class="n">lens</span><span class="p">,</span> <span class="n">blender_camera</span><span class="o">.</span><span class="n">shift_x</span><span class="p">,</span> <span class="n">blender_camera</span><span class="o">.</span><span class="n">sensor_fit</span><span class="p">)</span>
+
+<span class="n">blender_camera</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="s2">"camera.json"</span><span class="p">)</span>
+<span class="n">same_camera</span> <span class="o">=</span> <span class="n">BlenderCamera</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="s2">"camera.json"</span><span class="p">)</span>  <span class="c1"># same_camera.camera is None</span>
 </pre></div>
 </div>
 <dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.aperture_diameter">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">aperture_diameter</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.aperture_diameter" title="Link to this definition">#</a></dt>
+<dd><p>The diameter <span class="math notranslate nohighlight">\(D\)</span> of the aperture in the unit of the scene, or None for a pinhole
+camera. For a lens of focal length <span class="math notranslate nohighlight">\(f\)</span> and f-number <span class="math notranslate nohighlight">\(N\)</span>, <span class="math notranslate nohighlight">\(D = f / N\)</span>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.aperture_fstop">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">aperture_fstop</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.aperture_fstop" title="Link to this definition">#</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">dof.aperture_fstop</span></code> given to Blender, or None for a pinhole camera.</p>
+<p>Blender takes an aperture of diameter <code class="docutils literal notranslate"><span class="pre">lens</span> <span class="pre">*</span> <span class="pre">1e-3</span> <span class="pre">/</span> <span class="pre">aperture_fstop</span></code> in the unit of
+the scene (<code class="docutils literal notranslate"><span class="pre">lens</span></code> in millimeters, the scene assumed in meters), so</p>
+<div class="math notranslate nohighlight">
+\[\text{aperture\_fstop} = \frac{\text{lens} \times 10^{-3}}{D}\]</div>
+<p>It is <strong>not</strong> the f-number of the real lens (it depends on <a class="reference internal" href="#pysdic_blender.BlenderCamera.pixel_size" title="pysdic_blender.BlenderCamera.pixel_size"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pixel_size</span></code></a> and on the
+unit of the scene): only <a class="reference internal" href="#pysdic_blender.BlenderCamera.aperture_diameter" title="pysdic_blender.BlenderCamera.aperture_diameter"><code class="xref py py-attr docutils literal notranslate"><span class="pre">aperture_diameter</span></code></a> has a physical meaning here.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.blender_parameters">
+<span class="sig-name descname"><span class="pre">blender_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera.blender_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera.blender_parameters" title="Link to this definition">#</a></dt>
+<dd><p>The parameters as given to Blender: <code class="docutils literal notranslate"><span class="pre">resolution</span></code>, <code class="docutils literal notranslate"><span class="pre">pixel_aspect</span></code>, <code class="docutils literal notranslate"><span class="pre">lens</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sensor_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sensor_height</span></code>, <code class="docutils literal notranslate"><span class="pre">sensor_fit</span></code>, <code class="docutils literal notranslate"><span class="pre">shift_x</span></code>, <code class="docutils literal notranslate"><span class="pre">shift_y</span></code>,
+<code class="docutils literal notranslate"><span class="pre">clip_start</span></code>, <code class="docutils literal notranslate"><span class="pre">clip_end</span></code>, <code class="docutils literal notranslate"><span class="pre">location</span></code>, <code class="docutils literal notranslate"><span class="pre">quaternion</span></code>, <code class="docutils literal notranslate"><span class="pre">use_dof</span></code> and, with a
+depth of field, <code class="docutils literal notranslate"><span class="pre">aperture_fstop</span></code> and <code class="docutils literal notranslate"><span class="pre">focus_distance</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.15)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><em>Any</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.camera">
-<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">camera</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><span class="pre">Camera</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.camera" title="Link to this definition">#</a></dt>
-<dd><p>The reproduced <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a>.</p>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">camera</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><span class="pre">Camera</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.camera" title="Link to this definition">#</a></dt>
+<dd><p>The reproduced <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a>, or None if the Blender camera was rebuilt with
+<a class="reference internal" href="#pysdic_blender.BlenderCamera.from_dict" title="pysdic_blender.BlenderCamera.from_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_dict()</span></code></a> / <a class="reference internal" href="#pysdic_blender.BlenderCamera.from_json" title="pysdic_blender.BlenderCamera.from_json"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_json()</span></code></a> (only the parameters below are saved).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.center">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">center</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.center" title="Link to this definition">#</a></dt>
-<dd><p>The center of the camera <span class="math notranslate nohighlight">\(\vec{C} = -R^T \vec{t}\)</span> (3,) in the world.</p>
+<dd><p>The optical center <span class="math notranslate nohighlight">\(\vec{C} = -R^T \vec{t}\)</span> (3,) of the camera in the world, in
+the unit of the scene.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.clip_end">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">clip_end</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.clip_end" title="Link to this definition">#</a></dt>
-<dd><p>The distance of the far clipping plane.</p>
+<dd><p>The distance of the far clipping plane, in the unit of the scene (nothing farther is rendered).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.clip_start">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">clip_start</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.clip_start" title="Link to this definition">#</a></dt>
-<dd><p>The distance of the near clipping plane.</p>
+<dd><p>The distance of the near clipping plane, in the unit of the scene (nothing closer is rendered).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.defocus_blur">
+<span class="sig-name descname"><span class="pre">defocus_blur</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera.defocus_blur"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera.defocus_blur" title="Link to this definition">#</a></dt>
+<dd><p>The diameter in pixels (along <span class="math notranslate nohighlight">\(x\)</span>) of the defocus blur of points at the depths
+<code class="docutils literal notranslate"><span class="pre">depth</span></code> (<span class="math notranslate nohighlight">\(z_c &gt; 0\)</span>, any shape): <span class="math notranslate nohighlight">\(c = f_x D |1/z_c - 1/z_f|\)</span>, 0 for a
+pinhole camera. Useful to check the blur over a specimen seen with an inclination.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>depth</strong> (<em>ArrayLike</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.focus_distance">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">focus_distance</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.focus_distance" title="Link to this definition">#</a></dt>
+<dd><p>The depth <span class="math notranslate nohighlight">\(z_f\)</span> of the plane in focus (along the optical axis <span class="math notranslate nohighlight">\(z_c\)</span>) in the
+unit of the scene, or None for a pinhole camera.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.from_dict">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera.from_dict" title="Link to this definition">#</a></dt>
+<dd><p>Create a Blender camera from a dictionary of <a class="reference internal" href="#pysdic_blender.BlenderCamera.to_dict" title="pysdic_blender.BlenderCamera.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a>, <strong>without</strong> the
+<a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a> (<a class="reference internal" href="#pysdic_blender.BlenderCamera.camera" title="pysdic_blender.BlenderCamera.camera"><code class="xref py py-attr docutils literal notranslate"><span class="pre">camera</span></code></a> is None).</p>
+<p><code class="docutils literal notranslate"><span class="pre">resolution</span></code>, <code class="docutils literal notranslate"><span class="pre">rotation</span></code>, <code class="docutils literal notranslate"><span class="pre">translation</span></code> and <code class="docutils literal notranslate"><span class="pre">intrinsic_matrix</span></code> are required;
+<code class="docutils literal notranslate"><span class="pre">pixel_size</span></code>, <code class="docutils literal notranslate"><span class="pre">clip_start</span></code>, <code class="docutils literal notranslate"><span class="pre">clip_end</span></code>, <code class="docutils literal notranslate"><span class="pre">aperture_diameter</span></code> and
+<code class="docutils literal notranslate"><span class="pre">focus_distance</span></code> take the default values of the constructor if absent. <code class="docutils literal notranslate"><span class="pre">type</span></code> and <code class="docutils literal notranslate"><span class="pre">description</span></code> are ignored. The derived parameters
+<code class="docutils literal notranslate"><span class="pre">blender</span></code> are not read but checked: if present, they must match the parameters
+recomputed from the camera (a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> otherwise, e.g. after a manual edit of
+<code class="docutils literal notranslate"><span class="pre">lens</span></code>). An unknown key raises a <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.15)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><em>Any</em></a><em>]</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pysdic_blender.BlenderCamera" title="pysdic_blender.blender_camera.BlenderCamera"><em>BlenderCamera</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.from_json">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera.from_json" title="Link to this definition">#</a></dt>
+<dd><p>Create a Blender camera from a JSON file (see <a class="reference internal" href="#pysdic_blender.BlenderCamera.from_dict" title="pysdic_blender.BlenderCamera.from_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_dict()</span></code></a>), without the <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pysdic_blender.BlenderCamera" title="pysdic_blender.blender_camera.BlenderCamera"><em>BlenderCamera</em></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.height">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">height</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.height" title="Link to this definition">#</a></dt>
-<dd><p>The resolution <span class="math notranslate nohighlight">\(H\)</span> along <span class="math notranslate nohighlight">\(y\)</span> (pixels).</p>
+<dd><p>The resolution <span class="math notranslate nohighlight">\(H\)</span> of the image along <span class="math notranslate nohighlight">\(y\)</span> (number of rows), in <strong>pixels</strong>.</p>
+<p>It is <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/_generated/pysdic.Camera.sensor_height.html#pysdic.Camera.sensor_height" title="(in pysdic)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pysdic.Camera.sensor_height</span></code></a> of the pysdic camera, given to Blender as
+<code class="docutils literal notranslate"><span class="pre">render.resolution_y</span></code>. Not to be confused with <a class="reference internal" href="#pysdic_blender.BlenderCamera.sensor_height" title="pysdic_blender.BlenderCamera.sensor_height"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensor_height</span></code></a> (millimeters).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.intrinsic_matrix">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">intrinsic_matrix</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.intrinsic_matrix" title="Link to this definition">#</a></dt>
-<dd><p>The intrinsic matrix <span class="math notranslate nohighlight">\(K\)</span> (3, 3).</p>
+<dd><p>The intrinsic matrix <span class="math notranslate nohighlight">\(K\)</span> (3, 3) of the pinhole model, in pixels:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}K = \begin{pmatrix} f_x &amp; 0 &amp; c_x \\ 0 &amp; f_y &amp; c_y \\ 0 &amp; 0 &amp; 1 \end{pmatrix}\end{split}\]</div>
+<p>with the pixel centers at integer coordinates (the center of the first pixel is
+<span class="math notranslate nohighlight">\((0, 0)\)</span>, the center of the image is <span class="math notranslate nohighlight">\(((W - 1)/2, (H - 1)/2)\)</span>).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.lens">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">lens</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.lens" title="Link to this definition">#</a></dt>
 <dd><p>The focal length <code class="docutils literal notranslate"><span class="pre">lens</span></code> of the Blender camera in millimeters.</p>
+<div class="math notranslate nohighlight">
+\[\text{lens} = \frac{f_x \, s}{v}\]</div>
+<p>with the sensor size <span class="math notranslate nohighlight">\(s\)</span> (<a class="reference internal" href="#pysdic_blender.BlenderCamera.sensor_width" title="pysdic_blender.BlenderCamera.sensor_width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensor_width</span></code></a> if <a class="reference internal" href="#pysdic_blender.BlenderCamera.sensor_fit" title="pysdic_blender.BlenderCamera.sensor_fit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensor_fit</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">&quot;HORIZONTAL&quot;</span></code>, else <a class="reference internal" href="#pysdic_blender.BlenderCamera.sensor_height" title="pysdic_blender.BlenderCamera.sensor_height"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensor_height</span></code></a>) and the view factor <span class="math notranslate nohighlight">\(v\)</span> (<span class="math notranslate nohighlight">\(W\)</span>
+or <span class="math notranslate nohighlight">\((a_y / a_x) H\)</span>). As <span class="math notranslate nohighlight">\(s = p W\)</span> (or <span class="math notranslate nohighlight">\(p H\)</span>), <code class="docutils literal notranslate"><span class="pre">lens</span></code> is proportional
+to <a class="reference internal" href="#pysdic_blender.BlenderCamera.pixel_size" title="pysdic_blender.BlenderCamera.pixel_size"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pixel_size</span></code></a> while the image only depends on <span class="math notranslate nohighlight">\(f_x\)</span> in pixels: the pixel
+size only has to give <code class="docutils literal notranslate"><span class="pre">lens</span> <span class="pre">&gt;=</span> <span class="pre">1</span></code> mm, as required by Blender.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.location">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">location</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.location" title="Link to this definition">#</a></dt>
-<dd><p>its center <span class="math notranslate nohighlight">\(\vec{C} = -R^T \vec{t}\)</span> (convention 0).</p>
+<dd><p>its center
+<span class="math notranslate nohighlight">\(\vec{C} = -R^T \vec{t}\)</span> (<a class="reference internal" href="#pysdic_blender.BlenderCamera.center" title="pysdic_blender.BlenderCamera.center"><code class="xref py py-attr docutils literal notranslate"><span class="pre">center</span></code></a>, convention 0 camera-to-world).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The location of the Blender camera object</p>
+<dd class="field-odd"><p>The <code class="docutils literal notranslate"><span class="pre">location</span></code> (3,) of the Blender camera object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -521,76 +657,138 @@ short focal length.</p></li>
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.pixel_aspect">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">pixel_aspect</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.pixel_aspect" title="Link to this definition">#</a></dt>
-<dd><p>The pixel aspect ratio <span class="math notranslate nohighlight">\((a_x, a_y)\)</span> of the render (1 for square pixels).</p>
+<dd><p>The pixel aspect ratio <span class="math notranslate nohighlight">\((a_x, a_y) = (\max(1, f_y / f_x), \max(1, f_x / f_y))\)</span>
+given to Blender as <code class="docutils literal notranslate"><span class="pre">render.pixel_aspect_x</span></code> / <code class="docutils literal notranslate"><span class="pre">pixel_aspect_y</span></code>.</p>
+<p><span class="math notranslate nohighlight">\((1, 1)\)</span> for square pixels (<span class="math notranslate nohighlight">\(f_x = f_y\)</span>). Blender requires values
+<span class="math notranslate nohighlight">\(\geq 1\)</span>: only the largest ratio differs from 1.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.pixel_size">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">pixel_size</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.pixel_size" title="Link to this definition">#</a></dt>
-<dd><p>The size of a pixel in millimeters.</p>
+<dd><p>The size <span class="math notranslate nohighlight">\(p\)</span> of a pixel in millimeters, used to express <a class="reference internal" href="#pysdic_blender.BlenderCamera.sensor_width" title="pysdic_blender.BlenderCamera.sensor_width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensor_width</span></code></a>,
+<a class="reference internal" href="#pysdic_blender.BlenderCamera.sensor_height" title="pysdic_blender.BlenderCamera.sensor_height"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensor_height</span></code></a> and <a class="reference internal" href="#pysdic_blender.BlenderCamera.lens" title="pysdic_blender.BlenderCamera.lens"><code class="xref py py-attr docutils literal notranslate"><span class="pre">lens</span></code></a> in millimeters. It does not change the image
+(only the ratio <code class="docutils literal notranslate"><span class="pre">lens</span> <span class="pre">/</span> <span class="pre">sensor</span></code> matters), but must give <code class="docutils literal notranslate"><span class="pre">lens</span> <span class="pre">&gt;=</span> <span class="pre">1</span></code> mm.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.quaternion">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">quaternion</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.quaternion" title="Link to this definition">#</a></dt>
-<dd><p>the quaternion of
-<span class="math notranslate nohighlight">\(R_b = R^T \, \text{diag}(1, -1, -1)\)</span> (convention 0, OpenGL axes).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The rotation <code class="docutils literal notranslate"><span class="pre">(w,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> of the Blender camera object</p>
-</dd>
-</dl>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">rotation_quaternion</span></code> <code class="docutils literal notranslate"><span class="pre">(w,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> (unit, Blender order) of the Blender camera
+object: the quaternion of <span class="math notranslate nohighlight">\(R_b = R^T \, \text{diag}(1, -1, -1)\)</span>.</p>
+<p><span class="math notranslate nohighlight">\(R_b\)</span> is the camera-to-world rotation (convention 0) with the OpenGL axes of
+Blender: its columns are the axes <span class="math notranslate nohighlight">\(x_c\)</span>, <span class="math notranslate nohighlight">\(-y_c\)</span> and <span class="math notranslate nohighlight">\(-z_c\)</span> of the
+OpenCV camera in the world (the Blender camera looks along its local <span class="math notranslate nohighlight">\(-z\)</span>).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.rotation">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">rotation</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.rotation" title="Link to this definition">#</a></dt>
-<dd><p>The rotation <span class="math notranslate nohighlight">\(R\)</span> (3, 3) of <span class="math notranslate nohighlight">\(\vec{X}_c = R \vec{X}_w + \vec{t}\)</span> (read-only).</p>
+<dd><p>The rotation <span class="math notranslate nohighlight">\(R\)</span> (3, 3) of the world-to-camera transformation
+<span class="math notranslate nohighlight">\(\vec{X}_c = R \vec{X}_w + \vec{t}\)</span> (OpenCV convention, read-only).</p>
+<p>Its rows are the axes <span class="math notranslate nohighlight">\(x_c\)</span> (to the right), <span class="math notranslate nohighlight">\(y_c\)</span> (downwards) and
+<span class="math notranslate nohighlight">\(z_c\)</span> (optical axis) of the camera expressed in the world. It is read from the rays
+of the extrinsic (independent of the storage of its parameters) and checked on test
+points.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.sensor_fit">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_fit</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.sensor_fit" title="Link to this definition">#</a></dt>
-<dd><p>The sensor fit, <code class="docutils literal notranslate"><span class="pre">&quot;HORIZONTAL&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;VERTICAL&quot;</span></code>.</p>
+<dd><p>the dimension of the image along which the sensor
+size (and <code class="docutils literal notranslate"><span class="pre">lens</span></code>) is measured.</p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;HORIZONTAL&quot;</span></code> if <span class="math notranslate nohighlight">\(a_x W \geq a_y H\)</span> (the displayed image is wider than tall),
+else <code class="docutils literal notranslate"><span class="pre">&quot;VERTICAL&quot;</span></code>. It sets which of <a class="reference internal" href="#pysdic_blender.BlenderCamera.sensor_width" title="pysdic_blender.BlenderCamera.sensor_width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensor_width</span></code></a> and <a class="reference internal" href="#pysdic_blender.BlenderCamera.sensor_height" title="pysdic_blender.BlenderCamera.sensor_height"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensor_height</span></code></a> is
+used by <a class="reference internal" href="#pysdic_blender.BlenderCamera.lens" title="pysdic_blender.BlenderCamera.lens"><code class="xref py py-attr docutils literal notranslate"><span class="pre">lens</span></code></a>, and the view factor of <a class="reference internal" href="#pysdic_blender.BlenderCamera.shift_x" title="pysdic_blender.BlenderCamera.shift_x"><code class="xref py py-attr docutils literal notranslate"><span class="pre">shift_x</span></code></a> and <a class="reference internal" href="#pysdic_blender.BlenderCamera.shift_y" title="pysdic_blender.BlenderCamera.shift_y"><code class="xref py py-attr docutils literal notranslate"><span class="pre">shift_y</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The sensor fit of the Blender camera</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.sensor_height">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_height</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.sensor_height" title="Link to this definition">#</a></dt>
-<dd><p>The height of the sensor <span class="math notranslate nohighlight">\(p H\)</span> in millimeters.</p>
+<dd><p>The height of the Blender sensor <span class="math notranslate nohighlight">\(p H\)</span> in <strong>millimeters</strong> (<code class="docutils literal notranslate"><span class="pre">camera.sensor_height</span></code>
+of Blender).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Not to be confused with <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/_generated/pysdic.Camera.sensor_height.html#pysdic.Camera.sensor_height" title="(in pysdic)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pysdic.Camera.sensor_height</span></code></a>, the height of the image
+in <strong>pixels</strong> (here <a class="reference internal" href="#pysdic_blender.BlenderCamera.height" title="pysdic_blender.BlenderCamera.height"><code class="xref py py-attr docutils literal notranslate"><span class="pre">height</span></code></a>).</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.sensor_width">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_width</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.sensor_width" title="Link to this definition">#</a></dt>
-<dd><p>The width of the sensor <span class="math notranslate nohighlight">\(p W\)</span> in millimeters.</p>
+<dd><p>The width of the Blender sensor <span class="math notranslate nohighlight">\(p W\)</span> in <strong>millimeters</strong> (<code class="docutils literal notranslate"><span class="pre">camera.sensor_width</span></code>
+of Blender).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Not to be confused with <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/_generated/pysdic.Camera.sensor_width.html#pysdic.Camera.sensor_width" title="(in pysdic)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pysdic.Camera.sensor_width</span></code></a>, the width of the image in
+<strong>pixels</strong> (here <a class="reference internal" href="#pysdic_blender.BlenderCamera.width" title="pysdic_blender.BlenderCamera.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a>).</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.shift_x">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">shift_x</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.shift_x" title="Link to this definition">#</a></dt>
-<dd><p>The shift of the principal point along <span class="math notranslate nohighlight">\(x\)</span> (fraction of the view factor).</p>
+<dd><p>The shift <code class="docutils literal notranslate"><span class="pre">shift_x</span></code> of the principal point of the Blender camera, as a fraction of the
+view factor <span class="math notranslate nohighlight">\(v\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\text{shift}_x = -\frac{c_x - (W - 1)/2}{v}\]</div>
+<p>Blender places the principal point at the center of the image for a zero shift, i.e. at
+<span class="math notranslate nohighlight">\((W - 1)/2\)</span> in the pysdic convention of the pixels (centers at integer
+coordinates). A positive shift moves the image window to the right, so the principal
+point moves to the left: <span class="math notranslate nohighlight">\(c_x &lt; (W - 1)/2\)</span> gives <span class="math notranslate nohighlight">\(\text{shift}_x &gt; 0\)</span>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.shift_y">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">shift_y</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.shift_y" title="Link to this definition">#</a></dt>
-<dd><p>The shift of the principal point along <span class="math notranslate nohighlight">\(y\)</span> (fraction of the view factor).</p>
+<dd><p>The shift <code class="docutils literal notranslate"><span class="pre">shift_y</span></code> of the principal point of the Blender camera, as a fraction of the
+view factor <span class="math notranslate nohighlight">\(v\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\text{shift}_y = \frac{(c_y - (H - 1)/2) \, a_y / a_x}{v}\]</div>
+<p>The sign is opposite to <a class="reference internal" href="#pysdic_blender.BlenderCamera.shift_x" title="pysdic_blender.BlenderCamera.shift_x"><code class="xref py py-attr docutils literal notranslate"><span class="pre">shift_x</span></code></a> because the <span class="math notranslate nohighlight">\(y\)</span> axis of Blender goes
+upwards while the rows of the image go downwards; the factor <span class="math notranslate nohighlight">\(a_y / a_x\)</span> converts
+the rows into the displayed (square) units of Blender.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.to_dict">
-<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera.to_dict" title="Link to this definition">#</a></dt>
-<dd><p>The parameters of the Blender camera (as given to Blender), e.g. to save the setup of a
-rendering.</p>
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera.to_dict" title="Link to this definition">#</a></dt>
+<dd><p>Export the camera to a dictionary.</p>
+<p>The keys <code class="docutils literal notranslate"><span class="pre">resolution</span></code> <span class="math notranslate nohighlight">\((W, H)\)</span>, <code class="docutils literal notranslate"><span class="pre">rotation</span></code> <span class="math notranslate nohighlight">\(R\)</span>, <code class="docutils literal notranslate"><span class="pre">translation</span></code>
+<span class="math notranslate nohighlight">\(\vec{t}\)</span>, <code class="docutils literal notranslate"><span class="pre">intrinsic_matrix</span></code> <span class="math notranslate nohighlight">\(K\)</span>, <code class="docutils literal notranslate"><span class="pre">pixel_size</span></code>, <code class="docutils literal notranslate"><span class="pre">clip_start</span></code>,
+<code class="docutils literal notranslate"><span class="pre">clip_end</span></code>, <code class="docutils literal notranslate"><span class="pre">aperture_diameter</span></code> and <code class="docutils literal notranslate"><span class="pre">focus_distance</span></code> (None for a pinhole camera)
+define the camera; <code class="docutils literal notranslate"><span class="pre">blender</span></code> holds the derived parameters given to
+Blender (see <a class="reference internal" href="#pysdic_blender.BlenderCamera.blender_parameters" title="pysdic_blender.BlenderCamera.blender_parameters"><code class="xref py py-meth docutils literal notranslate"><span class="pre">blender_parameters()</span></code></a>), for information.</p>
+<p>The <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a> itself is not saved.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">resolution</span></code>, <code class="docutils literal notranslate"><span class="pre">pixel_aspect</span></code>, <code class="docutils literal notranslate"><span class="pre">lens</span></code>, <code class="docutils literal notranslate"><span class="pre">sensor_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sensor_height</span></code>,
-<code class="docutils literal notranslate"><span class="pre">sensor_fit</span></code>, <code class="docutils literal notranslate"><span class="pre">shift_x</span></code>, <code class="docutils literal notranslate"><span class="pre">shift_y</span></code>, <code class="docutils literal notranslate"><span class="pre">clip_start</span></code>, <code class="docutils literal notranslate"><span class="pre">clip_end</span></code>, <code class="docutils literal notranslate"><span class="pre">location</span></code>
-and <code class="docutils literal notranslate"><span class="pre">quaternion</span></code>.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em> | </em><em>None</em>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>, Any]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.15)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><em>Any</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic_blender/blender_camera.html#BlenderCamera.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic_blender.BlenderCamera.to_json" title="Link to this definition">#</a></dt>
+<dd><p>Export the camera to a JSON file (see <a class="reference internal" href="#pysdic_blender.BlenderCamera.to_dict" title="pysdic_blender.BlenderCamera.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -598,13 +796,23 @@ and <code class="docutils literal notranslate"><span class="pre">quaternion</spa
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.translation">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">translation</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.translation" title="Link to this definition">#</a></dt>
-<dd><p>The translation <span class="math notranslate nohighlight">\(\vec{t}\)</span> (3,) of <span class="math notranslate nohighlight">\(\vec{X}_c = R \vec{X}_w + \vec{t}\)</span> (read-only).</p>
+<dd><p>The translation <span class="math notranslate nohighlight">\(\vec{t}\)</span> (3,) of the world-to-camera transformation
+<span class="math notranslate nohighlight">\(\vec{X}_c = R \vec{X}_w + \vec{t}\)</span> (OpenCV convention, read-only): the world
+origin in the frame of the camera. The position of the camera is <a class="reference internal" href="#pysdic_blender.BlenderCamera.center" title="pysdic_blender.BlenderCamera.center"><code class="xref py py-attr docutils literal notranslate"><span class="pre">center</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.use_dof">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">use_dof</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.use_dof" title="Link to this definition">#</a></dt>
+<dd><p>Whether the camera has a depth of field (thin lens), i.e. an <a class="reference internal" href="#pysdic_blender.BlenderCamera.aperture_diameter" title="pysdic_blender.BlenderCamera.aperture_diameter"><code class="xref py py-attr docutils literal notranslate"><span class="pre">aperture_diameter</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pysdic_blender.BlenderCamera.width">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">width</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><a class="headerlink" href="#pysdic_blender.BlenderCamera.width" title="Link to this definition">#</a></dt>
-<dd><p>The resolution <span class="math notranslate nohighlight">\(W\)</span> along <span class="math notranslate nohighlight">\(x\)</span> (pixels).</p>
+<dd><p>The resolution <span class="math notranslate nohighlight">\(W\)</span> of the image along <span class="math notranslate nohighlight">\(x\)</span> (number of columns), in <strong>pixels</strong>.</p>
+<p>It is <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/_generated/pysdic.Camera.sensor_width.html#pysdic.Camera.sensor_width" title="(in pysdic)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pysdic.Camera.sensor_width</span></code></a> of the pysdic camera, given to Blender as
+<code class="docutils literal notranslate"><span class="pre">render.resolution_x</span></code>. Not to be confused with <a class="reference internal" href="#pysdic_blender.BlenderCamera.sensor_width" title="pysdic_blender.BlenderCamera.sensor_width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensor_width</span></code></a> (millimeters).</p>
 </dd></dl>
 
 </dd></dl>
@@ -659,10 +867,17 @@ and <code class="docutils literal notranslate"><span class="pre">quaternion</spa
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera"><code class="docutils literal notranslate"><span class="pre">BlenderCamera</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.aperture_diameter"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.aperture_diameter</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.aperture_fstop"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.aperture_fstop</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.blender_parameters"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.blender_parameters()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.camera"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.camera</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.center"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.center</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.clip_end"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.clip_end</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.clip_start"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.clip_start</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.defocus_blur"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.defocus_blur()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.focus_distance"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.focus_distance</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.from_dict"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.from_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.from_json"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.from_json()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.height"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.height</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.intrinsic_matrix"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.intrinsic_matrix</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.lens"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.lens</span></code></a></li>
@@ -677,7 +892,9 @@ and <code class="docutils literal notranslate"><span class="pre">quaternion</spa
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.shift_x"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.shift_x</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.shift_y"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.shift_y</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.to_dict"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.to_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.to_json"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.to_json()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.translation"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.translation</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.use_dof"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.use_dof</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic_blender.BlenderCamera.width"><code class="docutils literal notranslate"><span class="pre">BlenderCamera.width</span></code></a></li>
 </ul>
 </li>

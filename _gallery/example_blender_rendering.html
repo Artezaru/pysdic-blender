@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Rendering synthetic images with Blender &#8212; pysdic-blender 1.2.0 documentation</title>
+    <title>Rendering synthetic images with Blender &#8212; pysdic-blender 1.3.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,11 +51,12 @@
     <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
     <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_gallery/blender_rendering';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_gallery/example_blender_rendering';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Usage" href="../usage.html" />
+    <link rel="next" title="Stereo images of a deforming specimen" href="example_blender_stereo_sequence.html" />
+    <link rel="prev" title="Checking the Blender cameras against pysdic" href="example_blender_projection_check.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -127,7 +128,7 @@
   
   
   
-    <p class="title logo__title">pysdic-blender 1.2.0 documentation</p>
+    <p class="title logo__title">pysdic-blender 1.3.0 documentation</p>
   
 </a></div>
     
@@ -304,7 +305,12 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="example_blender_cameras_from_frames.html">Placing the cameras with frames</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_blender_depth_of_field.html">Depth of field of an inclined camera</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_blender_lights.html">Lighting a specimen with Blender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_blender_projection_check.html">Checking the Blender cameras against pysdic</a></li>
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Rendering synthetic images with Blender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_blender_stereo_sequence.html">Stereo images of a deforming specimen</a></li>
 </ul>
 </div>
 </nav></div>
@@ -367,11 +373,11 @@
                   
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-gallery-blender-rendering-py"><span class="std std-ref">Go to the end</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-gallery-example-blender-rendering-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="rendering-synthetic-images-with-blender">
-<span id="example-blender-rendering"></span><span id="sphx-glr-gallery-blender-rendering-py"></span><h1>Rendering synthetic images with Blender<a class="headerlink" href="#rendering-synthetic-images-with-blender" title="Link to this heading">#</a></h1>
+<span id="example-blender-rendering"></span><span id="sphx-glr-gallery-example-blender-rendering-py"></span><h1>Rendering synthetic images with Blender<a class="headerlink" href="#rendering-synthetic-images-with-blender" title="Link to this heading">#</a></h1>
 <nav class="contents local" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
@@ -454,16 +460,16 @@ reflection of the light). Each render is a linear intensity, mapped here to gray
 </span>    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">off</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
 </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="p">)</span><span class="w">
 </span></pre></div></div>
-<img src="../_images/sphx_glr_blender_rendering_001.png" srcset="../_images/sphx_glr_blender_rendering_001.png" alt="generate_synthetic_image, Blender, matte paint, Blender, polished steel" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.919 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-blender-rendering-py">
+<img src="../_images/sphx_glr_example_blender_rendering_001.png" srcset="../_images/sphx_glr_example_blender_rendering_001.png" alt="generate_synthetic_image, Blender, matte paint, Blender, polished steel" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.665 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-example-blender-rendering-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/aa64d692a49a30ba423adc79b1a2fc4c/blender_rendering.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">blender_rendering.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../_downloads/edc88dab9bfe4e1ce5c465912edd95a1/example_blender_rendering.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_blender_rendering.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/def877958f6028c6ee3ccb13d09af2d6/blender_rendering.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">blender_rendering.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../_downloads/e60fe7cc25712947eb8c651bc25ddc04/example_blender_rendering.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_blender_rendering.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/aadb210e53ee9dc7845bda4285a7f944/blender_rendering.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">blender_rendering.zip</span></code></a></p>
+<p><a class="reference download internal" download="" href="../_downloads/d4623002230d27c255a2b95309e6ff77/example_blender_rendering.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_blender_rendering.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -481,13 +487,22 @@ reflection of the light). Each render is a linear intensity, mapped here to gray
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../usage.html"
+       href="example_blender_projection_check.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Usage</p>
+        <p class="prev-next-title">Checking the Blender cameras against pysdic</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="example_blender_stereo_sequence.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Stereo images of a deforming specimen</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -517,7 +532,7 @@ reflection of the light). Each render is a linear intensity, mapped here to gray
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/_gallery/blender_rendering.rst.txt">
+    <a href="../_sources/_gallery/example_blender_rendering.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

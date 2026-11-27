@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:04.919** total execution time for 1 file **from all galleries**:
+**03:14.756** total execution time for 6 files **from all galleries**:
 
 .. container::
 
@@ -32,6 +32,21 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr__gallery_blender_rendering.py` (``../../gallery/blender_rendering.py``)
-     - 00:04.919
+   * - :ref:`sphx_glr__gallery_example_blender_stereo_sequence.py` (``../../gallery/example_blender_stereo_sequence.py``)
+     - 01:08.494
+     - 0.0
+   * - :ref:`sphx_glr__gallery_example_blender_depth_of_field.py` (``../../gallery/example_blender_depth_of_field.py``)
+     - 00:54.232
+     - 0.0
+   * - :ref:`sphx_glr__gallery_example_blender_lights.py` (``../../gallery/example_blender_lights.py``)
+     - 00:26.884
+     - 0.0
+   * - :ref:`sphx_glr__gallery_example_blender_cameras_from_frames.py` (``../../gallery/example_blender_cameras_from_frames.py``)
+     - 00:24.107
+     - 0.0
+   * - :ref:`sphx_glr__gallery_example_blender_projection_check.py` (``../../gallery/example_blender_projection_check.py``)
+     - 00:18.373
+     - 0.0
+   * - :ref:`sphx_glr__gallery_example_blender_rendering.py` (``../../gallery/example_blender_rendering.py``)
+     - 00:02.665
      - 0.0

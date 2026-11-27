@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic_blender.blender_camera &#8212; pysdic-blender 1.2.0 documentation</title>
+    <title>pysdic_blender.blender_camera &#8212; pysdic-blender 1.3.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../../_static/documentation_options.js?v=1f29e9d3"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic-blender 1.2.0 documentation</p>
+    <p class="title logo__title">pysdic-blender 1.3.0 documentation</p>
   
 </a></div>
     
@@ -361,13 +361,15 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Real</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">Real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Camera</span><span class="p">,</span> <span class="n">NoDistortion</span><span class="p">,</span> <span class="n">PerspectiveExtrinsic</span><span class="p">,</span> <span class="n">PinholeIntrinsic</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_array</span><span class="p">,</span> <span class="n">_validate_integer</span><span class="p">,</span> <span class="n">_validate_real</span>
 
 
 <span class="c1"># =============================================================================</span>
@@ -422,6 +424,27 @@
             <span class="s2">"supported by Blender."</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_rotation</span><span class="p">(</span><span class="n">rotation</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># A proper rotation matrix: orthonormal with a determinant +1</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rotation</span> <span class="o">@</span> <span class="n">rotation</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">error</span> <span class="o">&gt;</span> <span class="mf">1e-9</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'rotation' must be an orthonormal matrix. Got |R R^T - I| = </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">rotation</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'rotation' must be a proper rotation (determinant +1). Got a reflection."</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_intrinsic_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="c1"># fx, fy, cx, cy of an intrinsic matrix [[fx, 0, cx], [0, fy, cy], [0, 0, 1]]</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="s2">"intrinsic_matrix"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">expected_zeros</span> <span class="o">=</span> <span class="p">(</span><span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">value</span> <span class="o">!=</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">expected_zeros</span><span class="p">)</span> <span class="ow">or</span> <span class="n">K</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">1.0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">"Input 'intrinsic_matrix' must be [[fx, 0, cx], [0, fy, cy], [0, 0, 1]] (no skew, not supported by "</span>
+            <span class="sa">f</span><span class="s2">"Blender). Got </span><span class="si">{</span><span class="n">K</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 
 
 <span class="c1"># =============================================================================</span>
@@ -482,6 +505,29 @@
 <span class="sd">    (:attr:`quaternion`): the inverse of the pose needs **both** the center</span>
 <span class="sd">    :math:`-R^T \vec{t}` and the transposed rotation :math:`R^T`.</span>
 
+<span class="sd">    **Depth of field.** By default the camera is a pinhole (everything sharp). With an</span>
+<span class="sd">    ``aperture_diameter`` :math:`D` and a ``focus_distance`` :math:`z_f`, Cycles renders a thin</span>
+<span class="sd">    lens: the rays start on a disk of diameter :math:`D` centered on :attr:`center`, normal to</span>
+<span class="sd">    the optical axis, and converge on the plane :math:`z_c = z_f`. The points of this plane are</span>
+<span class="sd">    sharp; a point at the depth :math:`z_c` is spread on a disk of diameter (in pixels along</span>
+<span class="sd">    :math:`x`)</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        c = f_x \, D \, \left| \frac{1}{z_c} - \frac{1}{z_f} \right|</span>
+
+<span class="sd">    centered on its pinhole projection: the projection model above stays exact for the center</span>
+<span class="sd">    of the blur (no change of magnification with the focus). For a real lens of focal length</span>
+<span class="sd">    :math:`f` and f-number :math:`N`, :math:`D = f / N` (e.g. 50 mm at f/8: :math:`D = 6.25`</span>
+<span class="sd">    mm), in the unit of the scene. Blender computes the aperture from ``lens`` and its</span>
+<span class="sd">    ``aperture_fstop`` assuming a scene in meters: :attr:`aperture_fstop` is computed so that the</span>
+<span class="sd">    aperture is :math:`D` whatever the unit of the scene and :attr:`pixel_size`.</span>
+
+<span class="sd">    **Export.** :meth:`to_dict` / :meth:`to_json` save the parameters of the camera</span>
+<span class="sd">    (:math:`R`, :math:`\vec{t}`, :math:`K`, the resolution, the pixel size, the clipping</span>
+<span class="sd">    planes); :meth:`from_dict` / :meth:`from_json` rebuild the Blender camera **without** the</span>
+<span class="sd">    :class:`pysdic.Camera` (:attr:`camera` is then None).</span>
+
 <span class="sd">    The object is immutable: it reads the camera once at its creation.</span>
 
 <span class="sd">    Parameters</span>
@@ -497,6 +543,16 @@
 <span class="sd">    clip_start, clip_end : Real, optional (default: ``1e-3`` and ``1e6``)</span>
 <span class="sd">        The distances of the near and far clipping planes, in the unit of the scene.</span>
 
+<span class="sd">    aperture_diameter : Optional[Real], optional</span>
+<span class="sd">        The diameter :math:`D` of the aperture (entrance pupil) in the unit of the scene, for a</span>
+<span class="sd">        depth of field. By default None: pinhole camera, no defocus blur. Requires</span>
+<span class="sd">        ``focus_distance``.</span>
+
+<span class="sd">    focus_distance : Optional[Real], optional</span>
+<span class="sd">        The depth :math:`z_f` of the plane in focus (distance along the optical axis, in the</span>
+<span class="sd">        unit of the scene), e.g. ``(R @ target + t)[2]`` for a point ``target`` of the world.</span>
+<span class="sd">        Requires ``aperture_diameter``.</span>
+
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    TypeError</span>
@@ -504,7 +560,8 @@
 <span class="sd">        types above.</span>
 
 <span class="sd">    ValueError</span>
-<span class="sd">        If a transformation does not follow its model on the test points, or ``lens &lt; 1`` mm.</span>
+<span class="sd">        If a transformation does not follow its model on the test points, ``lens &lt; 1`` mm, or</span>
+<span class="sd">        only one of ``aperture_diameter`` and ``focus_distance`` is given.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -521,10 +578,14 @@
 <span class="sd">        blender_camera = BlenderCamera(camera)</span>
 <span class="sd">        print(blender_camera.lens, blender_camera.shift_x, blender_camera.sensor_fit)</span>
 
+<span class="sd">        blender_camera.to_json("camera.json")</span>
+<span class="sd">        same_camera = BlenderCamera.from_json("camera.json")  # same_camera.camera is None</span>
+
 <span class="sd">    """</span>
 
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">"_camera"</span><span class="p">,</span> <span class="s2">"_rotation"</span><span class="p">,</span> <span class="s2">"_translation"</span><span class="p">,</span> <span class="s2">"_fx"</span><span class="p">,</span> <span class="s2">"_fy"</span><span class="p">,</span> <span class="s2">"_cx"</span><span class="p">,</span> <span class="s2">"_cy"</span><span class="p">,</span> <span class="s2">"_pixel_size"</span><span class="p">,</span> <span class="s2">"_clip_start"</span><span class="p">,</span> <span class="s2">"_clip_end"</span><span class="p">,</span>
+        <span class="s2">"_camera"</span><span class="p">,</span> <span class="s2">"_width"</span><span class="p">,</span> <span class="s2">"_height"</span><span class="p">,</span> <span class="s2">"_rotation"</span><span class="p">,</span> <span class="s2">"_translation"</span><span class="p">,</span> <span class="s2">"_fx"</span><span class="p">,</span> <span class="s2">"_fy"</span><span class="p">,</span> <span class="s2">"_cx"</span><span class="p">,</span> <span class="s2">"_cy"</span><span class="p">,</span>
+        <span class="s2">"_pixel_size"</span><span class="p">,</span> <span class="s2">"_clip_start"</span><span class="p">,</span> <span class="s2">"_clip_end"</span><span class="p">,</span> <span class="s2">"_aperture_diameter"</span><span class="p">,</span> <span class="s2">"_focus_distance"</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -534,6 +595,8 @@
         <span class="n">pixel_size</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
         <span class="n">clip_start</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span>
         <span class="n">clip_end</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1e6</span><span class="p">,</span>
+        <span class="n">aperture_diameter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">focus_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">Camera</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'camera' must be a Camera. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
@@ -553,17 +616,67 @@
                 <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">distortion</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: render with the camera without distortion, then apply it with "</span>
                 <span class="s2">"pysdic.distort_image."</span>
             <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translation</span> <span class="o">=</span> <span class="n">_extract_pose</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">extrinsic</span><span class="p">)</span>
-        <span class="n">_check_pose</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">extrinsic</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translation</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span> <span class="o">=</span> <span class="n">_extract_intrinsic</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">intrinsic</span><span class="p">)</span>
+        <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span> <span class="o">=</span> <span class="n">_extract_pose</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">extrinsic</span><span class="p">)</span>
+        <span class="n">_check_pose</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">extrinsic</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">)</span>
+        <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">_extract_intrinsic</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">intrinsic</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup</span><span class="p">(</span>
+            <span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">),</span>
+            <span class="n">height</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">),</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">,</span>
+            <span class="n">translation</span><span class="o">=</span><span class="n">translation</span><span class="p">,</span>
+            <span class="n">intrinsic</span><span class="o">=</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">),</span>
+            <span class="n">pixel_size</span><span class="o">=</span><span class="n">pixel_size</span><span class="p">,</span>
+            <span class="n">clip_start</span><span class="o">=</span><span class="n">clip_start</span><span class="p">,</span>
+            <span class="n">clip_end</span><span class="o">=</span><span class="n">clip_end</span><span class="p">,</span>
+            <span class="n">aperture_diameter</span><span class="o">=</span><span class="n">aperture_diameter</span><span class="p">,</span>
+            <span class="n">focus_distance</span><span class="o">=</span><span class="n">focus_distance</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">camera</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Camera</span><span class="p">],</span>
+        <span class="n">width</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+        <span class="n">height</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+        <span class="n">rotation</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="n">translation</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="n">intrinsic</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+        <span class="n">pixel_size</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
+        <span class="n">clip_start</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
+        <span class="n">clip_end</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
+        <span class="n">aperture_diameter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Real</span><span class="p">],</span>
+        <span class="n">focus_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Real</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Validate and store the parameters (shared by __init__ and from_dict)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="o">=</span> <span class="n">camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="s2">"width"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_height</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="s2">"height"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="s2">"rotation"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">_check_rotation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_translation</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">translation</span><span class="p">,</span> <span class="s2">"translation"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">intrinsic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="s2">"fx"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">fy</span><span class="p">,</span> <span class="s2">"fy"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="s2">"cx"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span> <span class="s2">"cy"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_size</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">pixel_size</span><span class="p">,</span> <span class="s2">"pixel_size"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_clip_start</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">clip_start</span><span class="p">,</span> <span class="s2">"clip_start"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_clip_end</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">clip_end</span><span class="p">,</span> <span class="s2">"clip_end"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_end</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_start</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'clip_end' must be greater than 'clip_start'. Got </span><span class="si">{</span><span class="n">clip_start</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">clip_end</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">rotation_part</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translation</span><span class="p">):</span>
-            <span class="n">rotation_part</span><span class="o">.</span><span class="n">setflags</span><span class="p">(</span><span class="n">write</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">aperture_diameter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="n">focus_distance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"Inputs 'aperture_diameter' and 'focus_distance' must be given together (depth of field) or both be "</span>
+                <span class="sa">f</span><span class="s2">"None (pinhole camera). Got </span><span class="si">{</span><span class="n">aperture_diameter</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">focus_distance</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_aperture_diameter</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_focus_distance</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">aperture_diameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_aperture_diameter</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">aperture_diameter</span><span class="p">,</span> <span class="s2">"aperture_diameter"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_focus_distance</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">focus_distance</span><span class="p">,</span> <span class="s2">"focus_distance"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="o">.</span><span class="n">setflags</span><span class="p">(</span><span class="n">write</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_translation</span><span class="o">.</span><span class="n">setflags</span><span class="p">(</span><span class="n">write</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lens</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"The focal length of the Blender camera is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lens</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> mm, Blender requires at least 1 mm: "</span>
@@ -571,47 +684,85 @@
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">dof</span> <span class="o">=</span> <span class="s2">""</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dof</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">", aperture=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_aperture_diameter</span><span class="si">}</span><span class="s2">, focus=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_focus_distance</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">"BlenderCamera(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> pixels, lens=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lens</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> mm, "</span>
-            <span class="sa">f</span><span class="s2">"sensor_fit=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sensor_fit</span><span class="si">!r}</span><span class="s2">, shift=(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">shift_x</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">shift_y</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">))"</span>
+            <span class="sa">f</span><span class="s2">"sensor_fit=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sensor_fit</span><span class="si">!r}</span><span class="s2">, shift=(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">shift_x</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">shift_y</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)</span><span class="si">{</span><span class="n">dof</span><span class="si">}</span><span class="s2">)"</span>
         <span class="p">)</span>
 
     <span class="c1"># ===================================================================</span>
     <span class="c1"># pysdic camera</span>
     <span class="c1"># ===================================================================</span>
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">camera</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Camera</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The reproduced :class:`pysdic.Camera`."""</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">camera</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Camera</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The reproduced :class:`pysdic.Camera`, or None if the Blender camera was rebuilt with</span>
+<span class="sd">        :meth:`from_dict` / :meth:`from_json` (only the parameters below are saved).</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The resolution :math:`W` along :math:`x` (pixels)."""</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">)</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The resolution :math:`W` of the image along :math:`x` (number of columns), in **pixels**.</span>
+
+<span class="sd">        It is :attr:`pysdic.Camera.sensor_width` of the pysdic camera, given to Blender as</span>
+<span class="sd">        ``render.resolution_x``. Not to be confused with :attr:`sensor_width` (millimeters).</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The resolution :math:`H` along :math:`y` (pixels)."""</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">)</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The resolution :math:`H` of the image along :math:`y` (number of rows), in **pixels**.</span>
+
+<span class="sd">        It is :attr:`pysdic.Camera.sensor_height` of the pysdic camera, given to Blender as</span>
+<span class="sd">        ``render.resolution_y``. Not to be confused with :attr:`sensor_height` (millimeters).</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The rotation :math:`R` (3, 3) of :math:`\vec{X}_c = R \vec{X}_w + \vec{t}` (read-only)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The rotation :math:`R` (3, 3) of the world-to-camera transformation</span>
+<span class="sd">        :math:`\vec{X}_c = R \vec{X}_w + \vec{t}` (OpenCV convention, read-only).</span>
+
+<span class="sd">        Its rows are the axes :math:`x_c` (to the right), :math:`y_c` (downwards) and</span>
+<span class="sd">        :math:`z_c` (optical axis) of the camera expressed in the world. It is read from the rays</span>
+<span class="sd">        of the extrinsic (independent of the storage of its parameters) and checked on test</span>
+<span class="sd">        points.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The translation :math:`\vec{t}` (3,) of :math:`\vec{X}_c = R \vec{X}_w + \vec{t}` (read-only)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The translation :math:`\vec{t}` (3,) of the world-to-camera transformation</span>
+<span class="sd">        :math:`\vec{X}_c = R \vec{X}_w + \vec{t}` (OpenCV convention, read-only): the world</span>
+<span class="sd">        origin in the frame of the camera. The position of the camera is :attr:`center`.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translation</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The center of the camera :math:`\vec{C} = -R^T \vec{t}` (3,) in the world."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The optical center :math:`\vec{C} = -R^T \vec{t}` (3,) of the camera in the world, in</span>
+<span class="sd">        the unit of the scene.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translation</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">intrinsic_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The intrinsic matrix :math:`K` (3, 3)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The intrinsic matrix :math:`K` (3, 3) of the pinhole model, in pixels:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            K = \begin{pmatrix} f_x &amp; 0 &amp; c_x \\ 0 &amp; f_y &amp; c_y \\ 0 &amp; 0 &amp; 1 \end{pmatrix}</span>
+
+<span class="sd">        with the pixel centers at integer coordinates (the center of the first pixel is</span>
+<span class="sd">        :math:`(0, 0)`, the center of the image is :math:`((W - 1)/2, (H - 1)/2)`).</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fx</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>
 
     <span class="c1"># ===================================================================</span>
@@ -619,38 +770,71 @@
     <span class="c1"># ===================================================================</span>
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pixel_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The size of a pixel in millimeters."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The size :math:`p` of a pixel in millimeters, used to express :attr:`sensor_width`,</span>
+<span class="sd">        :attr:`sensor_height` and :attr:`lens` in millimeters. It does not change the image</span>
+<span class="sd">        (only the ratio ``lens / sensor`` matters), but must give ``lens &gt;= 1`` mm.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_size</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">clip_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The distance of the near clipping plane."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""The distance of the near clipping plane, in the unit of the scene (nothing closer is rendered)."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_start</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">clip_end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The distance of the far clipping plane."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""The distance of the far clipping plane, in the unit of the scene (nothing farther is rendered)."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_end</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pixel_aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The pixel aspect ratio :math:`(a_x, a_y)` of the render (1 for square pixels)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The pixel aspect ratio :math:`(a_x, a_y) = (\max(1, f_y / f_x), \max(1, f_x / f_y))`</span>
+<span class="sd">        given to Blender as ``render.pixel_aspect_x`` / ``pixel_aspect_y``.</span>
+
+<span class="sd">        :math:`(1, 1)` for square pixels (:math:`f_x = f_y`). Blender requires values</span>
+<span class="sd">        :math:`\geq 1`: only the largest ratio differs from 1.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">sensor_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The sensor fit, ``"HORIZONTAL"`` or ``"VERTICAL"``."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The sensor fit of the Blender camera: the dimension of the image along which the sensor</span>
+<span class="sd">        size (and ``lens``) is measured.</span>
+
+<span class="sd">        ``"HORIZONTAL"`` if :math:`a_x W \geq a_y H` (the displayed image is wider than tall),</span>
+<span class="sd">        else ``"VERTICAL"``. It sets which of :attr:`sensor_width` and :attr:`sensor_height` is</span>
+<span class="sd">        used by :attr:`lens`, and the view factor of :attr:`shift_x` and :attr:`shift_y`.</span>
+<span class="sd">        """</span>
         <span class="n">a_x</span><span class="p">,</span> <span class="n">a_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixel_aspect</span>
         <span class="k">return</span> <span class="s2">"HORIZONTAL"</span> <span class="k">if</span> <span class="n">a_x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;=</span> <span class="n">a_y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="k">else</span> <span class="s2">"VERTICAL"</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">sensor_width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The width of the sensor :math:`p W` in millimeters."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The width of the Blender sensor :math:`p W` in **millimeters** (``camera.sensor_width``</span>
+<span class="sd">        of Blender).</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            Not to be confused with :attr:`pysdic.Camera.sensor_width`, the width of the image in</span>
+<span class="sd">            **pixels** (here :attr:`width`).</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">sensor_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The height of the sensor :math:`p H` in millimeters."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The height of the Blender sensor :math:`p H` in **millimeters** (``camera.sensor_height``</span>
+<span class="sd">        of Blender).</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            Not to be confused with :attr:`pysdic.Camera.sensor_height`, the height of the image</span>
+<span class="sd">            in **pixels** (here :attr:`height`).</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
 
     <span class="nd">@property</span>
@@ -660,53 +844,150 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">lens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The focal length ``lens`` of the Blender camera in millimeters."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The focal length ``lens`` of the Blender camera in millimeters.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \text{lens} = \frac{f_x \, s}{v}</span>
+
+<span class="sd">        with the sensor size :math:`s` (:attr:`sensor_width` if :attr:`sensor_fit` is</span>
+<span class="sd">        ``"HORIZONTAL"``, else :attr:`sensor_height`) and the view factor :math:`v` (:math:`W`</span>
+<span class="sd">        or :math:`(a_y / a_x) H`). As :math:`s = p W` (or :math:`p H`), ``lens`` is proportional</span>
+<span class="sd">        to :attr:`pixel_size` while the image only depends on :math:`f_x` in pixels: the pixel</span>
+<span class="sd">        size only has to give ``lens &gt;= 1`` mm, as required by Blender.</span>
+<span class="sd">        """</span>
         <span class="n">sensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_width</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_fit</span> <span class="o">==</span> <span class="s2">"HORIZONTAL"</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_height</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="o">*</span> <span class="n">sensor</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_factor</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">shift_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The shift of the principal point along :math:`x` (fraction of the view factor)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The shift ``shift_x`` of the principal point of the Blender camera, as a fraction of the</span>
+<span class="sd">        view factor :math:`v`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \text{shift}_x = -\frac{c_x - (W - 1)/2}{v}</span>
+
+<span class="sd">        Blender places the principal point at the center of the image for a zero shift, i.e. at</span>
+<span class="sd">        :math:`(W - 1)/2` in the pysdic convention of the pixels (centers at integer</span>
+<span class="sd">        coordinates). A positive shift moves the image window to the right, so the principal</span>
+<span class="sd">        point moves to the left: :math:`c_x &lt; (W - 1)/2` gives :math:`\text{shift}_x &gt; 0`.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cx</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_factor</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">shift_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The shift of the principal point along :math:`y` (fraction of the view factor)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The shift ``shift_y`` of the principal point of the Blender camera, as a fraction of the</span>
+<span class="sd">        view factor :math:`v`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \text{shift}_y = \frac{(c_y - (H - 1)/2) \, a_y / a_x}{v}</span>
+
+<span class="sd">        The sign is opposite to :attr:`shift_x` because the :math:`y` axis of Blender goes</span>
+<span class="sd">        upwards while the rows of the image go downwards; the factor :math:`a_y / a_x` converts</span>
+<span class="sd">        the rows into the displayed (square) units of Blender.</span>
+<span class="sd">        """</span>
         <span class="n">a_x</span><span class="p">,</span> <span class="n">a_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixel_aspect</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cy</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">a_y</span> <span class="o">/</span> <span class="n">a_x</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_factor</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">location</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The location of the Blender camera object: its center :math:`\vec{C} = -R^T \vec{t}` (convention 0)."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The ``location`` (3,) of the Blender camera object: its center</span>
+<span class="sd">        :math:`\vec{C} = -R^T \vec{t}` (:attr:`center`, convention 0 camera-to-world).</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">center</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">quaternion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">        The rotation ``(w, x, y, z)`` of the Blender camera object: the quaternion of</span>
-<span class="sd">        :math:`R_b = R^T \, \text{diag}(1, -1, -1)` (convention 0, OpenGL axes).</span>
+<span class="sd">        The ``rotation_quaternion`` ``(w, x, y, z)`` (unit, Blender order) of the Blender camera</span>
+<span class="sd">        object: the quaternion of :math:`R_b = R^T \, \text{diag}(1, -1, -1)`.</span>
+
+<span class="sd">        :math:`R_b` is the camera-to-world rotation (convention 0) with the OpenGL axes of</span>
+<span class="sd">        Blender: its columns are the axes :math:`x_c`, :math:`-y_c` and :math:`-z_c` of the</span>
+<span class="sd">        OpenCV camera in the world (the Blender camera looks along its local :math:`-z`).</span>
 <span class="sd">        """</span>
         <span class="c1"># Columns of R_b: the rows of R (transposed rotation) with the signs of y and z changed</span>
         <span class="n">axes</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_rotation_to_quaternion</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BlenderCamera.to_dict">
-<a class="viewcode-back" href="../../api/BlenderCamera.html#pysdic_blender.BlenderCamera.to_dict">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="c1"># ===================================================================</span>
+    <span class="c1"># Depth of field</span>
+    <span class="c1"># ===================================================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">use_dof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Whether the camera has a depth of field (thin lens), i.e. an :attr:`aperture_diameter`."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aperture_diameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aperture_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">        The parameters of the Blender camera (as given to Blender), e.g. to save the setup of a</span>
-<span class="sd">        rendering.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Dict[str, Any]</span>
-<span class="sd">            ``resolution``, ``pixel_aspect``, ``lens``, ``sensor_width``, ``sensor_height``,</span>
-<span class="sd">            ``sensor_fit``, ``shift_x``, ``shift_y``, ``clip_start``, ``clip_end``, ``location``</span>
-<span class="sd">            and ``quaternion``.</span>
-
+<span class="sd">        The diameter :math:`D` of the aperture in the unit of the scene, or None for a pinhole</span>
+<span class="sd">        camera. For a lens of focal length :math:`f` and f-number :math:`N`, :math:`D = f / N`.</span>
 <span class="sd">        """</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"BlenderCamera"</span><span class="p">,</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aperture_diameter</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">focus_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The depth :math:`z_f` of the plane in focus (along the optical axis :math:`z_c`) in the</span>
+<span class="sd">        unit of the scene, or None for a pinhole camera.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_focus_distance</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aperture_fstop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The ``dof.aperture_fstop`` given to Blender, or None for a pinhole camera.</span>
+
+<span class="sd">        Blender takes an aperture of diameter ``lens * 1e-3 / aperture_fstop`` in the unit of</span>
+<span class="sd">        the scene (``lens`` in millimeters, the scene assumed in meters), so</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \text{aperture\_fstop} = \frac{\text{lens} \times 10^{-3}}{D}</span>
+
+<span class="sd">        It is **not** the f-number of the real lens (it depends on :attr:`pixel_size` and on the</span>
+<span class="sd">        unit of the scene): only :attr:`aperture_diameter` has a physical meaning here.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aperture_diameter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lens</span> <span class="o">*</span> <span class="mf">1e-3</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aperture_diameter</span>
+
+<div class="viewcode-block" id="BlenderCamera.defocus_blur">
+<a class="viewcode-back" href="../../api/BlenderCamera.html#pysdic_blender.BlenderCamera.defocus_blur">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">defocus_blur</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The diameter in pixels (along :math:`x`) of the defocus blur of points at the depths</span>
+<span class="sd">        ``depth`` (:math:`z_c &gt; 0`, any shape): :math:`c = f_x D |1/z_c - 1/z_f|`, 0 for a</span>
+<span class="sd">        pinhole camera. Useful to check the blur over a specimen seen with an inclination.</span>
+<span class="sd">        """</span>
+        <span class="n">depth</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">depth</span><span class="p">))</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">depth</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'depth' must contain finite positive depths."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aperture_diameter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">depth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aperture_diameter</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">depth</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_focus_distance</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ===================================================================</span>
+    <span class="c1"># Export</span>
+    <span class="c1"># ===================================================================</span>
+<div class="viewcode-block" id="BlenderCamera.blender_parameters">
+<a class="viewcode-back" href="../../api/BlenderCamera.html#pysdic_blender.BlenderCamera.blender_parameters">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">blender_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        The parameters as given to Blender: ``resolution``, ``pixel_aspect``, ``lens``,</span>
+<span class="sd">        ``sensor_width``, ``sensor_height``, ``sensor_fit``, ``shift_x``, ``shift_y``,</span>
+<span class="sd">        ``clip_start``, ``clip_end``, ``location``, ``quaternion``, ``use_dof`` and, with a</span>
+<span class="sd">        depth of field, ``aperture_fstop`` and ``focus_distance``.</span>
+<span class="sd">        """</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">"resolution"</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">],</span>
             <span class="s2">"pixel_aspect"</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pixel_aspect</span><span class="p">),</span>
             <span class="s2">"lens"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lens</span><span class="p">,</span>
@@ -719,7 +1000,141 @@
             <span class="s2">"clip_end"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_end</span><span class="p">,</span>
             <span class="s2">"location"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="s2">"quaternion"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">quaternion</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-        <span class="p">}</span></div>
+            <span class="s2">"use_dof"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dof</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dof</span><span class="p">:</span>
+            <span class="n">parameters</span><span class="p">[</span><span class="s2">"aperture_fstop"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aperture_fstop</span>
+            <span class="n">parameters</span><span class="p">[</span><span class="s2">"focus_distance"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_focus_distance</span>
+        <span class="k">return</span> <span class="n">parameters</span></div>
+
+
+<div class="viewcode-block" id="BlenderCamera.to_dict">
+<a class="viewcode-back" href="../../api/BlenderCamera.html#pysdic_blender.BlenderCamera.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Export the camera to a dictionary.</span>
+
+<span class="sd">        The keys ``resolution`` :math:`(W, H)`, ``rotation`` :math:`R`, ``translation``</span>
+<span class="sd">        :math:`\vec{t}`, ``intrinsic_matrix`` :math:`K`, ``pixel_size``, ``clip_start``,</span>
+<span class="sd">        ``clip_end``, ``aperture_diameter`` and ``focus_distance`` (None for a pinhole camera)</span>
+<span class="sd">        define the camera; ``blender`` holds the derived parameters given to</span>
+<span class="sd">        Blender (see :meth:`blender_parameters`), for information.</span>
+
+<span class="sd">        The :class:`pysdic.Camera` itself is not saved.</span>
+<span class="sd">        """</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"BlenderCamera"</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'description' must be a string. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"description"</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s2">"resolution"</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">],</span>
+            <span class="s2">"rotation"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="s2">"translation"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translation</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="s2">"intrinsic_matrix"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">intrinsic_matrix</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="s2">"pixel_size"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_size</span><span class="p">,</span>
+            <span class="s2">"clip_start"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_start</span><span class="p">,</span>
+            <span class="s2">"clip_end"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_end</span><span class="p">,</span>
+            <span class="s2">"aperture_diameter"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aperture_diameter</span><span class="p">,</span>
+            <span class="s2">"focus_distance"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_focus_distance</span><span class="p">,</span>
+            <span class="s2">"blender"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">blender_parameters</span><span class="p">(),</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="BlenderCamera.from_dict">
+<a class="viewcode-back" href="../../api/BlenderCamera.html#pysdic_blender.BlenderCamera.from_dict">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">BlenderCamera</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create a Blender camera from a dictionary of :meth:`to_dict`, **without** the</span>
+<span class="sd">        :class:`pysdic.Camera` (:attr:`camera` is None).</span>
+
+<span class="sd">        ``resolution``, ``rotation``, ``translation`` and ``intrinsic_matrix`` are required;</span>
+<span class="sd">        ``pixel_size``, ``clip_start``, ``clip_end``, ``aperture_diameter`` and</span>
+<span class="sd">        ``focus_distance`` take the default values of the constructor if absent. ``type`` and ``description`` are ignored. The derived parameters</span>
+<span class="sd">        ``blender`` are not read but checked: if present, they must match the parameters</span>
+<span class="sd">        recomputed from the camera (a ``ValueError`` otherwise, e.g. after a manual edit of</span>
+<span class="sd">        ``lens``). An unknown key raises a ``KeyError``.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'data' must be a dictionary. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">required</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"resolution"</span><span class="p">,</span> <span class="s2">"rotation"</span><span class="p">,</span> <span class="s2">"translation"</span><span class="p">,</span> <span class="s2">"intrinsic_matrix"</span><span class="p">)</span>
+        <span class="n">allowed</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">required</span><span class="p">)</span> <span class="o">|</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">,</span> <span class="s2">"pixel_size"</span><span class="p">,</span> <span class="s2">"clip_start"</span><span class="p">,</span> <span class="s2">"clip_end"</span><span class="p">,</span> <span class="s2">"aperture_diameter"</span><span class="p">,</span> <span class="s2">"focus_distance"</span><span class="p">,</span>
+            <span class="s2">"blender"</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">required</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing fields of a BlenderCamera: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">unknown</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="n">allowed</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unknown</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown fields of a BlenderCamera: </span><span class="si">{</span><span class="n">unknown</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">resolution</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"resolution"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resolution</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">resolution</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Field 'resolution' must be [width, height]. Got </span><span class="si">{</span><span class="n">resolution</span><span class="si">!r}</span><span class="s2">."</span><span class="p">)</span>
+
+        <span class="n">camera</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">camera</span><span class="o">.</span><span class="n">_setup</span><span class="p">(</span>
+            <span class="n">camera</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">height</span><span class="o">=</span><span class="n">resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"rotation"</span><span class="p">],</span>
+            <span class="n">translation</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"translation"</span><span class="p">],</span>
+            <span class="n">intrinsic</span><span class="o">=</span><span class="n">_parse_intrinsic_matrix</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"intrinsic_matrix"</span><span class="p">]),</span>
+            <span class="n">pixel_size</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pixel_size"</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span>
+            <span class="n">clip_start</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"clip_start"</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">),</span>
+            <span class="n">clip_end</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"clip_end"</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">),</span>
+            <span class="n">aperture_diameter</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"aperture_diameter"</span><span class="p">),</span>
+            <span class="n">focus_distance</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"focus_distance"</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># The derived parameters must match the camera (no silent ignore of an edited value)</span>
+        <span class="n">saved</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"blender"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">saved</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">saved</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Field 'blender' must be a dictionary. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">saved</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+            <span class="n">computed</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">blender_parameters</span><span class="p">()</span>
+            <span class="n">unknown</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">saved</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">computed</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">unknown</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown fields in 'blender' of a BlenderCamera: </span><span class="si">{</span><span class="n">unknown</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">saved</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">expected</span> <span class="o">=</span> <span class="n">computed</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"sensor_fit"</span><span class="p">,</span> <span class="s2">"use_dof"</span><span class="p">):</span>
+                    <span class="n">same</span> <span class="o">=</span> <span class="n">value</span> <span class="o">==</span> <span class="n">expected</span>
+                <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"quaternion"</span><span class="p">:</span>  <span class="c1"># q and -q are the same rotation</span>
+                    <span class="n">q</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+                    <span class="n">same</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,)</span> <span class="ow">and</span> <span class="p">(</span>
+                        <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+                        <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="o">-</span><span class="n">q</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+                    <span class="n">same</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span> <span class="ow">and</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">same</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">"The saved Blender parameter </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2"> (</span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2">) does not match the camera (</span><span class="si">{</span><span class="n">expected</span><span class="si">!r}</span><span class="s2">): "</span>
+                        <span class="s2">"the parameters of 'blender' are derived from the camera and cannot be edited, change "</span>
+                        <span class="s2">"'rotation', 'translation', 'intrinsic_matrix', 'pixel_size' or the clipping planes instead."</span>
+                    <span class="p">)</span>
+        <span class="k">return</span> <span class="n">camera</span></div>
+
+
+<div class="viewcode-block" id="BlenderCamera.to_json">
+<a class="viewcode-back" href="../../api/BlenderCamera.html#pysdic_blender.BlenderCamera.to_json">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Export the camera to a JSON file (see :meth:`to_dict`)."""</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">description</span><span class="p">),</span> <span class="n">file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BlenderCamera.from_json">
+<a class="viewcode-back" href="../../api/BlenderCamera.html#pysdic_blender.BlenderCamera.from_json">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BlenderCamera</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Create a Blender camera from a JSON file (see :meth:`from_dict`), without the :class:`pysdic.Camera`."""</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">))</span></div>
 </div>
 
 </pre></div>

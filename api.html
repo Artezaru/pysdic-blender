@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API Reference &#8212; pysdic-blender 1.2.0 documentation</title>
+    <title>API Reference &#8212; pysdic-blender 1.3.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=6efca38a"></script>
+    <script src="_static/documentation_options.js?v=1f29e9d3"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -128,7 +128,7 @@
   
   
   
-    <p class="title logo__title">pysdic-blender 1.2.0 documentation</p>
+    <p class="title logo__title">pysdic-blender 1.3.0 documentation</p>
   
 </a></div>
     
@@ -323,6 +323,7 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="api/BlenderSpotLight.html">pysdic_blender.BlenderSpotLight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/BlenderAreaLight.html">pysdic_blender.BlenderAreaLight</a></li>
 </ul>
 </div>
 </nav></div>
@@ -402,13 +403,17 @@ The reference describes how the methods work and which parameters can be used.</
 Camera ──────────────────────► BlenderCamera ──────┐
 Mesh (triangle_3) + texture ─► BlenderMesh ────────┤
                                BlenderMaterialBSDF ┼─► BlenderExperiment ──► render(camera) ──► image
-                               BlenderSpotLight ───┘
+                               BlenderSpotLight ───┤
+                               BlenderAreaLight ───┘
 </pre></div>
 </div>
 <p>The pose of the camera is converted from the OpenCV convention (<span class="math notranslate nohighlight">\(z\)</span> forward, <span class="math notranslate nohighlight">\(y\)</span> down) to the Blender
 convention (<span class="math notranslate nohighlight">\(z\)</span> backward, <span class="math notranslate nohighlight">\(y\)</span> up): with the world-to-camera rotation <span class="math notranslate nohighlight">\(R\)</span> and translation
 <span class="math notranslate nohighlight">\(\vec{t}\)</span> of the extrinsic, the center of the camera is <span class="math notranslate nohighlight">\(\vec{C} = -R^T \vec{t}\)</span> and its orientation in
 Blender is <span class="math notranslate nohighlight">\(R^T \, \text{diag}(1, -1, -1)\)</span>.</p>
+<p>The render is a linear intensity (float64, no quantization): a weighted sum of the RGB channels of Cycles for a
+monochrome sensor (<code class="docutils literal notranslate"><span class="pre">channel_weights</span></code>), or the RGB image with <code class="docutils literal notranslate"><span class="pre">color=True</span></code>. The gray levels, the noise and the
+quantization of the sensor are added in <code class="docutils literal notranslate"><span class="pre">pysdic</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Blender has a single scene per process: only one <a class="reference internal" href="api/BlenderExperiment.html#pysdic_blender.BlenderExperiment" title="pysdic_blender.BlenderExperiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderExperiment</span></code></a> is active at a time (a new experiment
@@ -427,7 +432,7 @@ resets the scene).</p>
 <section id="camera-and-mesh">
 <h2><a class="toc-backref" href="#id3" role="doc-backlink">Camera and mesh</a><a class="headerlink" href="#camera-and-mesh" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="api/BlenderCamera.html"><span class="doc">BlenderCamera</span></a>: A Blender camera from a <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a> (OpenCV pinhole model only).</p></li>
+<li><p><a class="reference internal" href="api/BlenderCamera.html"><span class="doc">BlenderCamera</span></a>: A Blender camera from a <a class="reference external" href="https://artezaru.github.io/pysdic/api/imaging/Camera.html#pysdic.Camera" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Camera</span></code></a> (OpenCV pinhole model only), with an optional depth of field.</p></li>
 <li><p><a class="reference internal" href="api/BlenderMesh.html"><span class="doc">BlenderMesh</span></a>: A Blender mesh from a <code class="docutils literal notranslate"><span class="pre">triangle_3</span></code> <a class="reference external" href="https://artezaru.github.io/pysdic/api/geometry/Mesh.html#pysdic.Mesh" title="(in pysdic)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Mesh</span></code></a> with its UV map and its texture.</p></li>
 </ul>
 <div class="toctree-wrapper compound">
@@ -450,7 +455,8 @@ resets the scene).</p>
 <section id="lights">
 <h2><a class="toc-backref" href="#id5" role="doc-backlink">Lights</a><a class="headerlink" href="#lights" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="api/BlenderSpotLight.html"><span class="doc">BlenderSpotLight</span></a>: A spot light, created from its position and direction or with <code class="docutils literal notranslate"><span class="pre">looking_at</span></code>.</p></li>
+<li><p><a class="reference internal" href="api/BlenderSpotLight.html"><span class="doc">BlenderSpotLight</span></a>: A spot light (cone of light from an emitting sphere), created from its position and direction or with <code class="docutils literal notranslate"><span class="pre">looking_at</span></code>.</p></li>
+<li><p><a class="reference internal" href="api/BlenderAreaLight.html"><span class="doc">BlenderAreaLight</span></a>: An area light (square, rectangle, disk or ellipse emitting from one side), e.g. an LED panel.</p></li>
 </ul>
 <div class="toctree-wrapper compound">
 </div>
